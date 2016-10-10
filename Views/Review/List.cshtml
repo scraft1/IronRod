@@ -1,0 +1,18 @@
+@model List<Passage>
+
+<h3>Review</h3>
+<br>
+<table>
+    <tr>
+        <th>Passage</th><th>Level</th>
+    </tr>
+@foreach(var passage in Model) {
+    <tr>
+        <td><a asp-action="Detail" asp-route-id="@passage.ID">@passage.Title</a></td>
+        <td>@passage.Level</td>
+    </tr> 
+}
+</table>
+
+<br>
+<p>Show passed today?</p> 

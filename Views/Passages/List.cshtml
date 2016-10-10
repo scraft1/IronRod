@@ -1,0 +1,16 @@
+@model List<Passage>
+    
+<h3>All Passages</h3>
+<br>
+<table>
+    <tr>
+        <th>Passage</th><th>Level</th><th>Date Passed</th>
+    </tr>
+@foreach(var passage in Model) {
+    <tr>
+        <td><a asp-action="Detail" asp-route-id="@passage.ID">@passage.Title</a></td>
+        <td>@passage.Level</td>
+        <td>@passage.DatePassed.ToString("MM/dd/yyyy")</td>
+    </tr> 
+}
+</table>

@@ -1,0 +1,8 @@
+@model List<Volume>
+
+<h3>Volumes</h3>
+
+@foreach (var volume in Model)
+{
+    <a asp-action="Books" asp-route-id="@volume.id">@volume.title</a><br>
+}

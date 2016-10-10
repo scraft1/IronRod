@@ -1,0 +1,18 @@
+@model Passage
+<br>
+<a asp-action="List">&#8592; Back</a><br>
+
+<h3>@Model.Title</h3>
+
+@foreach(var verse in Model.Verses){
+    <div class="verse">
+        @verse.VerseNumber @Html.Raw("&nbsp;&nbsp;") @verse.VerseText <br>
+    </div> 
+}
+
+<br>
+@if(Model.DatePassed != DateTime.Today || Model.Level == 0){
+    <form asp-action="Passed" asp-route-id="@Model.ID" method="post">
+        <button type="submit">Passed</button>
+    </form> 
+}

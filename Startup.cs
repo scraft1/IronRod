@@ -40,25 +40,37 @@ namespace IronRod
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<PassagesDbContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ScripturesDbContext>(options =>
+                options.UseSqlite(Configuration.GetConnectionString("LdsScripturesConnection"))); 
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+                .AddEntityFrameworkStores<PassagesDbContext>()
+                .AddDefaultTokenProviders(); 
 
             services.AddMvc();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            // seed data 
+            services.AddTransient<PassagesContextSeedData>();
+
+            // implement repository interfaces 
+            services.AddScoped<IPassagesRepository, PassagesRepository>();
+            services.AddScoped<IScripturesRepository, ScripturesRepository>();
+
+            // Logging
+            //services.AddLogging(); // needed ?? 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, PassagesContextSeedData seeder)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            loggerFactory.AddDebug(); // parameter LogLevel.Information or Error ?? 
 
             if (env.IsDevelopment())
             {
@@ -83,6 +95,8 @@ namespace IronRod
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            seeder.PlantSeedData().Wait(); 
         }
     }
 }

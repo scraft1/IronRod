@@ -1,0 +1,17 @@
+@model Topic 
+
+<h3>@Model.Title</h3> 
+
+<br>
+<p>Passages</p>
+
+<br><br>
+<a asp-action="List">&#8592; Back</a>
+&emsp;
+<form asp-action="Edit" asp-route-id="@Model.ID" method="get">
+    <button  type="submit">Edit</button>
+</form>
+&nbsp;
+<form asp-action="Delete" asp-route-id="@Model.ID" method="post">
+    <button type="submit">Delete</button>
+</form> 

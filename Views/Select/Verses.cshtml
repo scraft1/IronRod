@@ -1,0 +1,15 @@
+@model List<Verse>
+
+<h3 id="chapter_title">@ViewData["Chapter"]</h3>
+
+<a href="javascript:history.back()">&#8592; Back</a>
+<button id="select_button" onclick="createPassage()">Select</button><br><br>
+
+<div class="select">
+@foreach (var verse in Model)
+{
+    <div class="verse" onclick="selectVerse(this, @verse.id)">
+        @verse.verse_number @Html.Raw("&nbsp;&nbsp;") @verse.verse_text
+    </div>
+}
+</div>

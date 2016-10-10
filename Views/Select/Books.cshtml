@@ -1,0 +1,10 @@
+@model List<Book>
+
+<h3>@ViewData["Volume"]</h3>
+
+<a asp-action="Volumes">&#8592; Back</a><br><br>
+
+@foreach (var book in Model)
+{
+    <a asp-action="Chapters" asp-route-id="@book.id">@book.title</a><br>
+}

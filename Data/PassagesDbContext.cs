@@ -1,16 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using IronRod.Models;
 
 namespace IronRod.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class PassagesDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public PassagesDbContext(DbContextOptions<PassagesDbContext> options)
             : base(options)
         {
         }
@@ -22,5 +18,9 @@ namespace IronRod.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<Passage> Passages { get; set; }
+        public DbSet<PassageVerse> PassageVerses { get; set; }
+        public DbSet<Topic> Topics { get; set; }
     }
 }

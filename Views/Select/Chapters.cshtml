@@ -1,0 +1,10 @@
+@model List<Chapter>
+
+<h3>@ViewData["Book"]</h3>
+
+<a href="javascript:history.back()">&#8592; Back</a><br><br>
+
+@foreach (var chapter in Model)
+{
+    <a asp-action="Verses" asp-route-id="@chapter.id">@ViewData["Chapter"] @chapter.chapter_number</a><br>
+}

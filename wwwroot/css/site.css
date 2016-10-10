@@ -48,3 +48,34 @@ textarea {
     display: none
   }
 }
+
+/* what I added */
+form {
+    display: inline-block;
+}
+
+.verse {
+    max-width: 400px; 
+}
+.select {
+    cursor: pointer; 
+}
+
+.selected {
+    background-color: lightblue; 
+    font-weight: bold;
+}
+
+#select_button {
+    display: none;
+    margin-left:20px;
+}
+
+th {
+    padding-bottom: 10px;
+    font-style: italic;
+}
+td, th {
+    font-size:16px;
+    padding-right:30px;
+}

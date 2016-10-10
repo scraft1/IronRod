@@ -1,0 +1,17 @@
+@model Topic 
+
+<br><br>
+<a href="javascript:history.back()">&#8592; Back</a>
+&emsp;
+
+<form asp-action="Edit" asp-route-id="@Model.ID" method="post">
+    <label asp-for="Title"></label> 
+    <input asp-for="Title" value="@Model.Title" size="35">
+    <input type="submit" value="Save" />
+    <span asp-validation-for="Title"></span>
+
+</form> 
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
