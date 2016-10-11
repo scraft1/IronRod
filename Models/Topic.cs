@@ -7,6 +7,7 @@ namespace IronRod.Models
     public class Topic
     {
         public int ID { get; set; }
+        public string UserName {get; set;}
         [Required]
         public string Title { get; set; }
     }

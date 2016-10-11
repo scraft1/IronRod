@@ -50,15 +50,19 @@ textarea {
 }
 
 /* what I added */
-form {
+.topic form {
     display: inline-block;
 }
 
 .verse {
-    max-width: 400px; 
+    max-width: 400px;
+    cursor: pointer;  
 }
-.select {
-    cursor: pointer; 
+
+.taken {
+    background-color: lightgray;
+    pointer-events: none;
+    cursor: default !important;
 }
 
 .selected {
@@ -79,3 +83,4 @@ td, th {
     font-size:16px;
     padding-right:30px;
 }
+

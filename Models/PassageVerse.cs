@@ -12,5 +12,6 @@ namespace IronRod.Models
         
         public int PassageID { get; set; }
         public Passage Passage {get; set;}
+        public int ChapterID {get; set;}
     }
 }

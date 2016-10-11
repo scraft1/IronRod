@@ -9,17 +9,18 @@ namespace IronRod.Data
         void SaveChanges();
 
         // PASSAGES 
-        IEnumerable<Passage> GetAllPassages();
-        IEnumerable<Passage> GetReviewPassages();
+        IEnumerable<Passage> GetAllPassagesByUser(string username);
+        IEnumerable<Passage> GetReviewPassagesByUser(string username);
         Passage GetPassageById(int id);
         void Pass(Passage passage);
         void RemovePassage(Passage passage);
         int CountTotalVerses();
         void AddPassage(Passage passage);
         void AddPassageVerse(PassageVerse pv);
+        IEnumerable<int> GetTakenVerseIds(string username, int chapterid);
 
         // TOPICS 
-        IEnumerable<Topic> GetAllTopics();
+        IEnumerable<Topic> GetTopicsByUser(string username);
         Topic GetTopicById(int id);
         void AddTopic(Topic topic); 
         void RemoveTopic(Topic topic); 

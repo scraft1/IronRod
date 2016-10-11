@@ -13,8 +13,7 @@ namespace IronRod.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.0.1")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "1.0.1");
 
             modelBuilder.Entity("IronRod.Models.ApplicationUser", b =>
                 {
@@ -70,15 +69,19 @@ namespace IronRod.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ApplicationUserId");
+
                     b.Property<DateTime>("DatePassed");
 
                     b.Property<int>("Level");
 
                     b.Property<string>("Title");
 
-                    b.Property<int>("UserID");
+                    b.Property<string>("UserName");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Passages");
                 });
@@ -87,6 +90,8 @@ namespace IronRod.Migrations
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ChapterID");
 
                     b.Property<int>("PassageID");
 
@@ -108,9 +113,16 @@ namespace IronRod.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Title");
+                    b.Property<string>("ApplicationUserId");
+
+                    b.Property<string>("Title")
+                        .IsRequired();
+
+                    b.Property<string>("UserName");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Topics");
                 });
@@ -222,12 +234,26 @@ namespace IronRod.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("IronRod.Models.Passage", b =>
+                {
+                    b.HasOne("IronRod.Models.ApplicationUser")
+                        .WithMany("Passages")
+                        .HasForeignKey("ApplicationUserId");
+                });
+
             modelBuilder.Entity("IronRod.Models.PassageVerse", b =>
                 {
                     b.HasOne("IronRod.Models.Passage", "Passage")
                         .WithMany("Verses")
                         .HasForeignKey("PassageID")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("IronRod.Models.Topic", b =>
+                {
+                    b.HasOne("IronRod.Models.ApplicationUser")
+                        .WithMany("Topics")
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

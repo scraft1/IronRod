@@ -15,7 +15,7 @@ namespace IronRod.Controllers
             _repository = repository; 
         }
         public IActionResult List(){
-            var topics = _repository.GetAllTopics();
+            var topics = _repository.GetTopicsByUser(this.User.Identity.Name);
             ViewData["Topics"] = topics;  
             return View();
         }
@@ -27,6 +27,7 @@ namespace IronRod.Controllers
         [HttpPost] 
         public IActionResult Create(Topic topic){
             if(ModelState.IsValid){
+                topic.UserName = User.Identity.Name;
                 _repository.AddTopic(topic);
             }
             return RedirectToAction("List"); 

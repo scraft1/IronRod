@@ -21,12 +21,13 @@ namespace IronRod.Data
         }
 
         // PASSAGES 
-        public IEnumerable<Passage> GetAllPassages(){
+        public IEnumerable<Passage> GetAllPassagesByUser(string username){
             _logger.LogInformation("Gettting all passages from the database"); 
-            return _context.Passages.ToList();
+            return _context.Passages.Where(p => p.UserName == username).ToList();
         }
-        public IEnumerable<Passage> GetReviewPassages(){
-            return _context.Passages.Where(p => p.DatePassed.AddDays(p.Level) <= DateTime.Today).ToList();
+        public IEnumerable<Passage> GetReviewPassagesByUser(string username){
+            return _context.Passages.Where(p => p.UserName == username)
+            .Where(p => p.DatePassed.AddDays(p.Level) <= DateTime.Today).ToList();
         }
         public Passage GetPassageById(int id){
             return _context.Passages.Include(p => p.Verses).SingleOrDefault(p => p.ID == id);
@@ -48,13 +49,20 @@ namespace IronRod.Data
         }
         public void AddPassageVerse(PassageVerse pv){
             _context.PassageVerses.Add(pv);
-            // _context.SaveChanges(); // only save when passage is added ?? 
+            // only save when passage is added ?? 
+        }
+        public IEnumerable<int> GetTakenVerseIds(string username, int chapterid){
+            return _context.PassageVerses
+                    .Where(pv => pv.ChapterID == chapterid
+                            && pv.Passage.UserName == username)
+                    .Select(pv => pv.VerseID).ToList();
         }
 
 
+
         // TOPICS 
-        public IEnumerable<Topic> GetAllTopics(){
-            return _context.Topics.ToList();
+        public IEnumerable<Topic> GetTopicsByUser(string username){
+            return _context.Topics.Where(t => t.UserName == username).ToList();
         }
         public Topic GetTopicById(int id){
             return _context.Topics.SingleOrDefault(t => t.ID == id);

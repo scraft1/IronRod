@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace IronRod.Migrations
 {
@@ -35,35 +34,6 @@ namespace IronRod.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Passages",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    DatePassed = table.Column<DateTime>(nullable: false),
-                    Level = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(nullable: true),
-                    UserID = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Passages", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Topics",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Topics", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -92,11 +62,55 @@ namespace IronRod.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Passages",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Autoincrement", true),
+                    ApplicationUserId = table.Column<string>(nullable: true),
+                    DatePassed = table.Column<DateTime>(nullable: false),
+                    Level = table.Column<int>(nullable: false),
+                    Title = table.Column<string>(nullable: true),
+                    UserName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Passages", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Passages_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Topics",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Autoincrement", true),
+                    ApplicationUserId = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(nullable: false),
+                    UserName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Topics", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Topics_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Autoincrement", true),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: false)
@@ -133,33 +147,11 @@ namespace IronRod.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PassageVerses",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    PassageID = table.Column<int>(nullable: false),
-                    VerseID = table.Column<int>(nullable: false),
-                    VerseNumber = table.Column<int>(nullable: false),
-                    VerseText = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PassageVerses", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_PassageVerses_Passages_PassageID",
-                        column: x => x.PassageID,
-                        principalTable: "Passages",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Autoincrement", true),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true),
                     RoleId = table.Column<string>(nullable: false)
@@ -199,6 +191,29 @@ namespace IronRod.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "PassageVerses",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Autoincrement", true),
+                    ChapterID = table.Column<int>(nullable: false),
+                    PassageID = table.Column<int>(nullable: false),
+                    VerseID = table.Column<int>(nullable: false),
+                    VerseNumber = table.Column<int>(nullable: false),
+                    VerseText = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PassageVerses", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_PassageVerses_Passages_PassageID",
+                        column: x => x.PassageID,
+                        principalTable: "Passages",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "AspNetUsers",
@@ -211,9 +226,19 @@ namespace IronRod.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Passages_ApplicationUserId",
+                table: "Passages",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PassageVerses_PassageID",
                 table: "PassageVerses",
                 column: "PassageID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Topics_ApplicationUserId",
+                table: "Topics",
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",

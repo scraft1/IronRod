@@ -6,7 +6,7 @@ namespace IronRod.Models
     public class Passage
     {
         public int ID { get; set; }
-        public int UserID {get; set;}
+        public string UserName {get; set;}
         public string Title {get; set;}
         public int Level {get; set;} = 0; 
         public DateTime DatePassed {get; set;} = DateTime.Today; 

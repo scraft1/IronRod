@@ -18,6 +18,7 @@ namespace IronRod.Controllers
         {
             return View();
         }
+        [Authorize] 
         public IActionResult Stats()
         {
             ViewData["Total"] = _repository.CountTotalVerses();

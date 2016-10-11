@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ namespace IronRod
 {
     public class Startup
     {
+        private IHostingEnvironment _env;
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -24,6 +26,7 @@ namespace IronRod
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
+            _env = env;
             if (env.IsDevelopment())
             {
                 // For more details on using the user secret store see https://go.microsoft.com/fwlink/?LinkID=532709
@@ -45,11 +48,23 @@ namespace IronRod
             services.AddDbContext<ScripturesDbContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("LdsScripturesConnection"))); 
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(
+                config => {
+                    config.User.RequireUniqueEmail = true;
+                    // config.Password.RequiredLength = 8;
+                    // config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
+                }
+            )  
                 .AddEntityFrameworkStores<PassagesDbContext>()
                 .AddDefaultTokenProviders(); 
 
-            services.AddMvc();
+            services.AddMvc(config =>
+            {
+                if(_env.IsProduction()){
+                    config.Filters.Add(new RequireHttpsAttribute());
+                }
+            }
+            );
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
