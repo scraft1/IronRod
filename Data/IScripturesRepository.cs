@@ -13,5 +13,7 @@ namespace IronRod.Data
         Chapter GetChapterById(int id);
         IEnumerable<Verse> GetVerses(int chapter_id);
         Verse GetVerseById(int id);
+        IEnumerable<Verse> GetVersesByIds(IEnumerable<int> ids);
+        IEnumerable<int> GetVerseNumsByIds(IEnumerable<int> ids);
     }
 }

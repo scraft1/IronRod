@@ -35,5 +35,20 @@ namespace IronRod.Data
         public Verse GetVerseById(int id){
             return _context.Verses.SingleOrDefault(v => v.id == id);
         }
+        public IEnumerable<Verse> GetVersesByIds(IEnumerable<int> ids){
+            var verses = new List<Verse>();
+            foreach(var vid in ids){
+                verses.Add(GetVerseById(vid));
+            }
+            return verses;
+        }
+        public IEnumerable<int> GetVerseNumsByIds(IEnumerable<int> ids){
+            var verseids = new List<int>();
+            foreach(var id in ids){
+                var num = _context.Verses.Where(v => v.id == id).Select(v => v.verse_number).SingleOrDefault();
+                verseids.Add(num);
+            }
+            return verseids;
+        }
     }
 }

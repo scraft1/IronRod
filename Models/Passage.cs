@@ -13,6 +13,8 @@ namespace IronRod.Models
 
         public ICollection<PassageVerse> Verses { get; set; }
 
+        public ICollection<PassageTopic> PassageTopics { get; set; }
+
         public void Passed() {
             if(DatePassed < DateTime.Today || Level == 0){
                 Level = Level + 1;

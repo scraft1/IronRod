@@ -22,3 +22,7 @@ function createPassage(){
     var verses = 'verses='+selectedVerses.join(); 
     window.location = location.origin+'/Passages/Create?'+chapter+'&'+verses; 
 }
+
+function selectSMSet(smset){
+    window.location = location.origin+'/Passages/CreateSM?smset='+smset; 
+}

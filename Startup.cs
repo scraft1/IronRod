@@ -47,16 +47,22 @@ namespace IronRod
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<ScripturesDbContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("LdsScripturesConnection"))); 
+            services.AddDbContext<ScriptureMasteryDbContext>(options =>
+                options.UseSqlite(Configuration.GetConnectionString("ScriptureMasteryConnection"))); 
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(
-                config => {
-                    config.User.RequireUniqueEmail = true;
-                    // config.Password.RequiredLength = 8;
+            services.AddIdentity<ApplicationUser, IdentityRole>(config => 
+                {
+                    config.Password.RequireDigit = false;
+                    config.Password.RequireLowercase = false;
+                    config.Password.RequireNonAlphanumeric = false;
+                    config.Password.RequireUppercase = false;
+                    // config.User.RequireUniqueEmail = true;
                     // config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
                 }
             )  
                 .AddEntityFrameworkStores<PassagesDbContext>()
                 .AddDefaultTokenProviders(); 
+                // AddPasswordValidator(CustomValidator); 
 
             services.AddMvc(config =>
             {
@@ -76,6 +82,7 @@ namespace IronRod
             // implement repository interfaces 
             services.AddScoped<IPassagesRepository, PassagesRepository>();
             services.AddScoped<IScripturesRepository, ScripturesRepository>();
+            services.AddScoped<IScriptureMasteryRepository, SMRepository>();
 
             // Logging
             //services.AddLogging(); // needed ?? 
@@ -98,6 +105,7 @@ namespace IronRod
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseStatusCodePages();
             app.UseStaticFiles();
 
             app.UseIdentity();

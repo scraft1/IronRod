@@ -16,10 +16,6 @@ namespace IronRod.Data
             _logger = logger; 
         }
 
-        public void SaveChanges(){
-            _context.SaveChanges();
-        }
-
         // PASSAGES 
         public IEnumerable<Passage> GetAllPassagesByUser(string username){
             _logger.LogInformation("Gettting all passages from the database"); 
@@ -49,16 +45,23 @@ namespace IronRod.Data
         }
         public void AddPassageVerse(PassageVerse pv){
             _context.PassageVerses.Add(pv);
-            // only save when passage is added ?? 
         }
         public IEnumerable<int> GetTakenVerseIds(string username, int chapterid){
-            return _context.PassageVerses
-                    .Where(pv => pv.ChapterID == chapterid
-                            && pv.Passage.UserName == username)
-                    .Select(pv => pv.VerseID).ToList();
+            return _context.PassageVerses.Where(pv => pv.ChapterID == chapterid
+                                        && pv.Passage.UserName == username)
+                                        .Select(pv => pv.VerseID).ToList();
         }
-
-
+        public IEnumerable<int> GetTakenSMVerseIds(string username, IEnumerable<int> ids){
+            var taken = new List<int>();
+            foreach(var id in ids){
+                Console.WriteLine(id);
+                var pverse = _context.PassageVerses.Where(pv => pv.Passage.UserName == username)
+                                                .FirstOrDefault(pv => pv.VerseID == id);
+                if(pverse != null) taken.Add(pverse.VerseID); 
+            }
+            return taken;
+        }
+        
 
         // TOPICS 
         public IEnumerable<Topic> GetTopicsByUser(string username){

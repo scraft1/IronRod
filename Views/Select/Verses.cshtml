@@ -6,13 +6,16 @@
 <h3 id="chapter_title">@ViewData["Chapter"]</h3>
 
 <a href="javascript:history.back()">&#8592; Back</a>
-<button id="select_button" onclick="createPassage()">Select</button><br><br>
+<button id="select_button" class="hidden" onclick="createPassage()">Select</button><br><br>
 
 @foreach (var verse in Model)
 {
     <div class="verse 
     @if(taken.Contains(@verse.id)){
         @Html.Raw("taken")
+    }
+    else{
+        @Html.Raw("available")
     }
     " onclick="selectVerse(this, @verse.id)">
         @verse.verse_number @Html.Raw("&nbsp;&nbsp;") @verse.verse_text

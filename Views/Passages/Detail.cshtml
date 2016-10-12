@@ -1,4 +1,7 @@
 @model Passage
+@{
+    var topics = ViewData["Topics"] as List<Topic>;
+}
 <br>
 <a asp-action="List">&#8592; Back</a><br>
 
@@ -9,8 +12,14 @@
         @verse.VerseNumber @Html.Raw("&nbsp;&nbsp;") @verse.VerseText <br>
     </div> 
 }
-
 <br><br>
-<form asp-action="Delete" asp-route-id="@Model.ID" method="post">
+
+@foreach(var t in topics){
+    @t.Title <br>
+}
+
+<br>
+<form asp-action="Delete" asp-route-id="@Model.ID" method="post"
+        onsubmit="return confirm('Do you want to delete this passage?');">
     <button type="submit">Delete</button>
 </form> 

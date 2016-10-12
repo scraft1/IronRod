@@ -5,9 +5,6 @@ namespace IronRod.Data
 {
     public interface IPassagesRepository
     {
-        // GENERAL
-        void SaveChanges();
-
         // PASSAGES 
         IEnumerable<Passage> GetAllPassagesByUser(string username);
         IEnumerable<Passage> GetReviewPassagesByUser(string username);
@@ -18,6 +15,7 @@ namespace IronRod.Data
         void AddPassage(Passage passage);
         void AddPassageVerse(PassageVerse pv);
         IEnumerable<int> GetTakenVerseIds(string username, int chapterid);
+        IEnumerable<int> GetTakenSMVerseIds(string username, IEnumerable<int> ids);
 
         // TOPICS 
         IEnumerable<Topic> GetTopicsByUser(string username);

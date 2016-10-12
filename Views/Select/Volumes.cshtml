@@ -1,8 +1,18 @@
 @model List<Volume>
+@{
+    var sm = ViewData["SM"] as List<SMVolume>;
+}
 
 <h3>Volumes</h3>
 
 @foreach (var volume in Model)
 {
     <a asp-action="Books" asp-route-id="@volume.id">@volume.title</a><br>
+}
+
+<br>
+<h3>Scripture Mastery</h3>
+@foreach (var volume in sm)
+{
+    <a asp-action="Sets" asp-route-id="@volume.id">@volume.title</a><br>
 }

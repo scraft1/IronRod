@@ -10,6 +10,6 @@ namespace IronRod.Models
     public class ApplicationUser : IdentityUser
     { 
         public List<Passage> Passages {get; set;} 
-        public List<Topic> Topics {get; set;}         
+        public List<Topic> Topics {get; set;}     
     }
 }

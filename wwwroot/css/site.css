@@ -56,6 +56,9 @@ textarea {
 
 .verse {
     max-width: 400px;
+}
+
+.available {
     cursor: pointer;  
 }
 
@@ -71,8 +74,11 @@ textarea {
 }
 
 #select_button {
-    display: none;
     margin-left:20px;
+}
+
+.hidden {
+    display: none;
 }
 
 th {

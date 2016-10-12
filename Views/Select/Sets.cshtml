@@ -1,0 +1,10 @@
+@model List<Set>
+
+<h3>@ViewData["Volume"]</h3>
+
+<a href="javascript:history.back()">&#8592; Back</a><br><br>
+
+@foreach (var set in Model)
+{
+    <a asp-action="SMSet" asp-route-id="@set.id">@set.title</a><br>
+}

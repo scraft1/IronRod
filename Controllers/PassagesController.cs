@@ -16,11 +16,16 @@ namespace IronRod.Controllers
     {
         private IPassagesRepository _repository; 
         private IScripturesRepository _scriptures; 
+        private IScriptureMasteryRepository _smrepo;
         private ILogger<PassagesController> _logger; 
         public PassagesController(IPassagesRepository repository, 
-            IScripturesRepository scriptures, ILogger<PassagesController> logger){
+                                IScripturesRepository scriptures, 
+                                IScriptureMasteryRepository smrepo,
+                                ILogger<PassagesController> logger)
+        {
             _repository = repository; 
             _scriptures = scriptures;
+            _smrepo = smrepo; 
             _logger = logger;
         }
         public IActionResult List(){
@@ -35,6 +40,9 @@ namespace IronRod.Controllers
         public IActionResult Detail(int id){
             var passage = _repository.GetPassageById(id); 
             if(passage == null) return View("Error"); 
+
+            var topics = _repository.GetTopicsByUser(this.User.Identity.Name);
+            ViewData["Topics"] = topics; 
             return View(passage);
         }
         [HttpPost] 
@@ -46,37 +54,40 @@ namespace IronRod.Controllers
             return RedirectToAction("List"); 
         }
         public IActionResult Create(CreatePassageModel cpm){
-            var verses = cpm.GetVerseIds();
-            
-            var passage = new Passage(); 
-            List<int> verseNums = new List<int>();
+            var verseids = cpm.GetVerseIds();
+            var versenums = _scriptures.GetVerseNumsByIds(verseids).ToList();
+            var title = cpm.ParseReference(versenums); 
+            return RedirectToAction("AddPassage", new {
+                title = title,
+                verseids = verseids
+            }); 
+        }
+        public IActionResult CreateSM(int smset){
+            var verseids = _smrepo.GetVerseIdsBySet(smset);
+            var title = _smrepo.GetSetById(smset).title;
 
-            foreach(var id in verses){
-                try{
+            return RedirectToAction("AddPassage", new {
+                title = title,
+                verseids = verseids
+            });
+        }
+        public IActionResult AddPassage(string title, List<int> verseids){
+            var passage = new Passage();
+            passage.UserName = User.Identity.Name;
+            passage.Title = title;
+            try{
+                foreach(var id in verseids){
                     var verse = _scriptures.GetVerseById(id);
                     if(verse == null) return View("Error"); 
-    
-                    var pv = new PassageVerse{
-                        VerseID=id, 
-                        Passage=passage, 
-                        VerseNumber=verse.verse_number,
-                        VerseText=verse.verse_text,
-                        ChapterID=verse.chapter_id
-                    };
+                    var pv = new PassageVerse(passage, verse);
                     _repository.AddPassageVerse(pv);
-                    verseNums.Add(pv.VerseNumber); 
-                } catch(Exception ex){
-                    _logger.LogError($"Failed to create new passage: {ex.Message}");
-                    return View("Error");
-                }
-                
+                } 
+            } catch(Exception ex){
+                _logger.LogError($"Failed to create new passage: {ex.Message}");
+                return View("Error");
             }
-            passage.UserName = User.Identity.Name; 
-            passage.Title = cpm.ParseReference(verseNums); 
             _repository.AddPassage(passage);
             return RedirectToAction("List"); 
         }
-
-        
     }
 }
