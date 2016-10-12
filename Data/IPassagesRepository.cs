@@ -23,5 +23,12 @@ namespace IronRod.Data
         void AddTopic(Topic topic); 
         void RemoveTopic(Topic topic); 
         void EditTopic(Topic topic);
+
+        // PASSAGE TOPICS
+        void AddPassageTopic(PassageTopic passagetopic);
+        IEnumerable<Topic> GetTopicsByPassage(Passage passage);
+        IEnumerable<Passage> GetPassagesByTopic(Topic topic);
+        PassageTopic GetPassageTopic(Passage passage, Topic topic);
+        void RemovePassageTopic(PassageTopic passagetopic);
     }
 }

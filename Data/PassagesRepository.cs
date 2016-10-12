@@ -26,7 +26,8 @@ namespace IronRod.Data
             .Where(p => p.DatePassed.AddDays(p.Level) <= DateTime.Today).ToList();
         }
         public Passage GetPassageById(int id){
-            return _context.Passages.Include(p => p.Verses).SingleOrDefault(p => p.ID == id);
+            return _context.Passages.Include(p => p.Verses).Include(p => p.PassageTopics)
+                                    .SingleOrDefault(p => p.ID == id);
         }
         public void Pass(Passage passage){
             passage.Passed();
@@ -84,5 +85,26 @@ namespace IronRod.Data
             _context.SaveChanges(); 
         }
 
+        // PASSAGE TOPICS 
+        public void AddPassageTopic(PassageTopic passagetopic){
+            _context.PassageTopics.Add(passagetopic);
+            _context.SaveChanges(); 
+        }
+        public IEnumerable<Topic> GetTopicsByPassage(Passage passage){
+            return _context.PassageTopics.Where(pt => pt.Passage == passage)
+                                        .Select(pt => pt.Topic).ToList();
+        }
+        public IEnumerable<Passage> GetPassagesByTopic(Topic topic){
+            return _context.PassageTopics.Where(pt => pt.Topic == topic)
+                                        .Select(pt => pt.Passage).ToList();
+        }
+        public PassageTopic GetPassageTopic(Passage passage, Topic topic){
+            return _context.PassageTopics.SingleOrDefault(pt => pt.Passage == passage 
+                                                            && pt.Topic == topic);
+        }
+        public void RemovePassageTopic(PassageTopic passagetopic){
+            _context.PassageTopics.Remove(passagetopic);
+            _context.SaveChanges();
+        }
     }
 }

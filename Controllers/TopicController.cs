@@ -21,7 +21,10 @@ namespace IronRod.Controllers
         }
         public IActionResult Detail(int id){
             var topic = _repository.GetTopicById(id);
-            if(topic == null) return View("Error");  
+            if(topic == null) return View("Error");
+
+            var passages = _repository.GetPassagesByTopic(topic);
+            ViewData["Passages"] = passages;  
             return View(topic);
         }
         [HttpPost] 

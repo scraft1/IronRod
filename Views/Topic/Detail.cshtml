@@ -1,10 +1,21 @@
 @model Topic
+@{
+    var passages = ViewData["Passages"] as List<Passage>;
+}
 
-<h3>@Model.Title</h3>
-<a asp-action="List">&#8592; Back</a>
-<br><br>
-<p>Passages</p>
 <br>
+<a asp-action="List">&#8592; Back</a>
+<h3>@Model.Title</h3>
+<br>
+
+@if(passages.Count == 0){
+    <i>No assigned passages</i><br>
+}
+@foreach(var passage in passages){
+    <a asp-controller="Passages" asp-action="Detail" asp-route-id="@passage.ID">@passage.Title</a><br>
+}
+
+<br><br>
 
 <div class="topic">
 <form asp-action="Edit" asp-route-id="@Model.ID" method="get">

@@ -14,6 +14,11 @@ namespace IronRod.Models
 
     public class PassageTopic
     {
+        public PassageTopic(){}
+        public PassageTopic(Passage passage, Topic topic){
+            Passage = passage;
+            Topic = topic;
+        }
         public int ID {get;set;}
         public int PassageID {get;set;}
         public Passage Passage {get;set;}

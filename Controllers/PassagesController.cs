@@ -41,8 +41,11 @@ namespace IronRod.Controllers
             var passage = _repository.GetPassageById(id); 
             if(passage == null) return View("Error"); 
 
-            var topics = _repository.GetTopicsByUser(this.User.Identity.Name);
-            ViewData["Topics"] = topics; 
+            var passagetopics = _repository.GetTopicsByPassage(passage);
+            var alltopics = _repository.GetTopicsByUser(this.User.Identity.Name);
+            ViewData["PassageTopics"] = passagetopics; 
+            ViewData["AllTopics"] = alltopics;
+
             return View(passage);
         }
         [HttpPost] 
@@ -88,6 +91,28 @@ namespace IronRod.Controllers
             }
             _repository.AddPassage(passage);
             return RedirectToAction("List"); 
+        }
+
+        public IActionResult AddTopic(int id, int topicid){
+            var passage = _repository.GetPassageById(id);
+            var topic = _repository.GetTopicById(topicid);
+            if(passage == null || topic == null) return View("Error"); 
+
+            var pt = new PassageTopic(passage, topic);
+            _repository.AddPassageTopic(pt);
+
+            return RedirectToAction("Detail", new {id = id});
+        }
+
+        public IActionResult RemovePassageTopic(int id, int topicid){
+            var passage = _repository.GetPassageById(id);
+            var topic = _repository.GetTopicById(topicid);
+            if(passage == null || topic == null) return View("Error"); 
+            
+            var passagetopic = _repository.GetPassageTopic(passage, topic);
+            _repository.RemovePassageTopic(passagetopic);
+            
+            return RedirectToAction("Detail", new {id = id});
         }
     }
 }

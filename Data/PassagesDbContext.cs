@@ -21,6 +21,7 @@ namespace IronRod.Data
 
         public DbSet<Passage> Passages { get; set; }
         public DbSet<PassageVerse> PassageVerses { get; set; }
+        public DbSet<PassageTopic> PassageTopics { get; set; }
         public DbSet<Topic> Topics { get; set; }
     }
 }
