@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using IronRod.Data;
 
-namespace IronRod.Controllers
+namespace IronRod.Controllers.Web
 {
     public class HomeController : Controller
     {

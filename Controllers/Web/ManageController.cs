@@ -10,7 +10,7 @@ using IronRod.Models;
 using IronRod.Models.ManageViewModels;
 using IronRod.Services;
 
-namespace IronRod.Controllers
+namespace IronRod.Controllers.Web
 {
     [Authorize]
     public class ManageController : Controller

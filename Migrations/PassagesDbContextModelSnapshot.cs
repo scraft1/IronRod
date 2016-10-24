@@ -73,11 +73,15 @@ namespace IronRod.Migrations
 
                     b.Property<DateTime>("DatePassed");
 
+                    b.Property<int>("FirstVerse");
+
                     b.Property<int>("Level");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
-                    b.Property<string>("UserName");
+                    b.Property<string>("UserName")
+                        .IsRequired();
 
                     b.HasKey("ID");
 
@@ -117,7 +121,8 @@ namespace IronRod.Migrations
 
                     b.Property<int>("VerseNumber");
 
-                    b.Property<string>("VerseText");
+                    b.Property<string>("VerseText")
+                        .IsRequired();
 
                     b.HasKey("ID");
 
@@ -136,7 +141,8 @@ namespace IronRod.Migrations
                     b.Property<string>("Title")
                         .IsRequired();
 
-                    b.Property<string>("UserName");
+                    b.Property<string>("UserName")
+                        .IsRequired();
 
                     b.HasKey("ID");
 

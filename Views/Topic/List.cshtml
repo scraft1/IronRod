@@ -1,20 +1,16 @@
-@model Topic
-@{
-    var topics = ViewData["Topics"] as List<Topic>;
-}
+@model List<Topic>
 
 <h3>Topics</h3>
 
-@foreach (var topic in topics)
+@foreach (var topic in Model)
 {
     <a asp-action="Detail" asp-route-id="@topic.ID">@topic.Title</a><br>
 }
 
 <br>
 <form asp-controller="Topic" asp-action="Create" method="post">
-    <input asp-for="Title" size="35"/>
+    <input name="title" size="35" required/>
     <input type="submit" value="Create Topic" />
-    <span asp-validation-for="Title"></span>
 </form> 
 
 @section Scripts {

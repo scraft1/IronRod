@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
 using IronRod.Data;
 using IronRod.Models;
 using IronRod.Services;
@@ -58,6 +60,20 @@ namespace IronRod
                     config.Password.RequireUppercase = false;
                     // config.User.RequireUniqueEmail = true;
                     // config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
+                    config.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents()
+                    {
+                        OnRedirectToLogin = async ctx => 
+                        {
+                            if(ctx.Request.Path.StartsWithSegments("/api") && 
+                                ctx.Response.StatusCode == 200)
+                            {
+                                ctx.Response.StatusCode = 401;  
+                            } else {
+                                ctx.Response.Redirect(ctx.RedirectUri);
+                            }
+                            await Task.Yield(); 
+                        }
+                    };
                 }
             )  
                 .AddEntityFrameworkStores<PassagesDbContext>()
@@ -69,9 +85,8 @@ namespace IronRod
                 if(_env.IsProduction()){
                     config.Filters.Add(new RequireHttpsAttribute());
                 }
-            }
-            );
-
+            });
+    
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
@@ -94,15 +109,21 @@ namespace IronRod
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug(); // parameter LogLevel.Information or Error ?? 
 
+            Mapper.Initialize(config => {
+                config.CreateMap<PassageViewModel, Passage>().ReverseMap();
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
                 app.UseBrowserLink();
+                loggerFactory.AddDebug(LogLevel.Information);
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                loggerFactory.AddDebug(LogLevel.Error);
             }
 
             app.UseStatusCodePages();

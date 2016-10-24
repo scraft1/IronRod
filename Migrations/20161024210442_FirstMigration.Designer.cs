@@ -8,7 +8,7 @@ using IronRod.Data;
 namespace IronRod.Migrations
 {
     [DbContext(typeof(PassagesDbContext))]
-    [Migration("20161011153407_FirstMigration")]
+    [Migration("20161024210442_FirstMigration")]
     partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,17 +74,39 @@ namespace IronRod.Migrations
 
                     b.Property<DateTime>("DatePassed");
 
+                    b.Property<int>("FirstVerse");
+
                     b.Property<int>("Level");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
-                    b.Property<string>("UserName");
+                    b.Property<string>("UserName")
+                        .IsRequired();
 
                     b.HasKey("ID");
 
                     b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Passages");
+                });
+
+            modelBuilder.Entity("IronRod.Models.PassageTopic", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("PassageID");
+
+                    b.Property<int>("TopicID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PassageID");
+
+                    b.HasIndex("TopicID");
+
+                    b.ToTable("PassageTopics");
                 });
 
             modelBuilder.Entity("IronRod.Models.PassageVerse", b =>
@@ -100,7 +122,8 @@ namespace IronRod.Migrations
 
                     b.Property<int>("VerseNumber");
 
-                    b.Property<string>("VerseText");
+                    b.Property<string>("VerseText")
+                        .IsRequired();
 
                     b.HasKey("ID");
 
@@ -119,7 +142,8 @@ namespace IronRod.Migrations
                     b.Property<string>("Title")
                         .IsRequired();
 
-                    b.Property<string>("UserName");
+                    b.Property<string>("UserName")
+                        .IsRequired();
 
                     b.HasKey("ID");
 
@@ -240,6 +264,19 @@ namespace IronRod.Migrations
                     b.HasOne("IronRod.Models.ApplicationUser")
                         .WithMany("Passages")
                         .HasForeignKey("ApplicationUserId");
+                });
+
+            modelBuilder.Entity("IronRod.Models.PassageTopic", b =>
+                {
+                    b.HasOne("IronRod.Models.Passage", "Passage")
+                        .WithMany("PassageTopics")
+                        .HasForeignKey("PassageID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("IronRod.Models.Topic", "Topic")
+                        .WithMany("PassageTopics")
+                        .HasForeignKey("TopicID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("IronRod.Models.PassageVerse", b =>

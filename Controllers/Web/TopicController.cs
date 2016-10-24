@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using IronRod.Data;
 using IronRod.Models; 
 
-namespace IronRod.Controllers
+namespace IronRod.Controllers.Web
 {
     public class TopicController : Controller
     {
@@ -16,8 +16,7 @@ namespace IronRod.Controllers
         }
         public IActionResult List(){
             var topics = _repository.GetTopicsByUser(this.User.Identity.Name);
-            ViewData["Topics"] = topics;  
-            return View();
+            return View(topics);
         }
         public IActionResult Detail(int id){
             var topic = _repository.GetTopicById(id);
@@ -28,12 +27,16 @@ namespace IronRod.Controllers
             return View(topic);
         }
         [HttpPost] 
-        public IActionResult Create(Topic topic){
-            if(ModelState.IsValid){
-                topic.UserName = User.Identity.Name;
+        public async Task<IActionResult> Create(string title){
+            if(title != null){
+                var topic = new Topic();
+                topic.Title = title;
+                topic.UserName = this.User.Identity.Name;
                 _repository.AddTopic(topic);
+
+                if(await _repository.SaveChangesAsync()) return RedirectToAction("List"); 
             }
-            return RedirectToAction("List"); 
+            return BadRequest("Failed to add the topic");
         }
         public IActionResult Edit(int id){
             var topic = _repository.GetTopicById(id);
@@ -41,20 +44,25 @@ namespace IronRod.Controllers
             return View(topic);
         }
         [HttpPost] 
-        public IActionResult Edit(Topic topic){
-            if(ModelState.IsValid){
-                var oldTopic = _repository.GetTopicById(topic.ID);
-                if(oldTopic == null) return View("Error");
-                _repository.EditTopic(topic);
+        public async Task<IActionResult> Edit(TopicViewModel tvm){
+            if(ModelState.IsValid){ // use topic view model (id, title) ?? 
+                var topic = _repository.GetTopicById(tvm.ID); // for user ?? 
+                if(topic == null) return View("Error");
+                topic.Title = tvm.Title;
+
+                if(await _repository.SaveChangesAsync()){
+                    return RedirectToAction("Detail", new {id = topic.ID}); 
+                }
             }
-            return RedirectToAction("Detail", new {id = topic.ID}); 
+            return BadRequest("Failed to edit topic"); 
         }
         [HttpPost] 
-        public IActionResult Delete(int id){
+        public async Task<IActionResult> Delete(int id){
             var topic = _repository.GetTopicById(id);
             if(topic == null) return View("Error"); 
             _repository.RemoveTopic(topic);
-            return RedirectToAction("List"); 
+            if(await _repository.SaveChangesAsync()) return RedirectToAction("List"); 
+            return BadRequest("Failed to remove the topic"); 
         }
     }
 }

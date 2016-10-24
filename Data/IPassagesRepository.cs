@@ -1,15 +1,17 @@
 using System.Collections.Generic; 
+using System.Threading.Tasks;
 using IronRod.Models;
 
 namespace IronRod.Data
 {
     public interface IPassagesRepository
     {
+        Task<bool> SaveChangesAsync();
+
         // PASSAGES 
         IEnumerable<Passage> GetAllPassagesByUser(string username);
         IEnumerable<Passage> GetReviewPassagesByUser(string username);
         Passage GetPassageById(int id);
-        void Pass(Passage passage);
         void RemovePassage(Passage passage);
         int CountTotalVerses();
         void AddPassage(Passage passage);

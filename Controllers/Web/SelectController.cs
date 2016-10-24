@@ -6,7 +6,7 @@ using IronRod.Data;
 using IronRod.Models;
 
 
-namespace IronRod.Controllers
+namespace IronRod.Controllers.Web
 {
     public class SelectController : Controller
     {

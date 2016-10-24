@@ -69,9 +69,10 @@ namespace IronRod.Migrations
                         .Annotation("Autoincrement", true),
                     ApplicationUserId = table.Column<string>(nullable: true),
                     DatePassed = table.Column<DateTime>(nullable: false),
+                    FirstVerse = table.Column<int>(nullable: false),
                     Level = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(nullable: true),
-                    UserName = table.Column<string>(nullable: true)
+                    Title = table.Column<string>(nullable: false),
+                    UserName = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -92,7 +93,7 @@ namespace IronRod.Migrations
                         .Annotation("Autoincrement", true),
                     ApplicationUserId = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: false),
-                    UserName = table.Column<string>(nullable: true)
+                    UserName = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -201,7 +202,7 @@ namespace IronRod.Migrations
                     PassageID = table.Column<int>(nullable: false),
                     VerseID = table.Column<int>(nullable: false),
                     VerseNumber = table.Column<int>(nullable: false),
-                    VerseText = table.Column<string>(nullable: true)
+                    VerseText = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -210,6 +211,32 @@ namespace IronRod.Migrations
                         name: "FK_PassageVerses_Passages_PassageID",
                         column: x => x.PassageID,
                         principalTable: "Passages",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PassageTopics",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Autoincrement", true),
+                    PassageID = table.Column<int>(nullable: false),
+                    TopicID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PassageTopics", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_PassageTopics_Passages_PassageID",
+                        column: x => x.PassageID,
+                        principalTable: "Passages",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PassageTopics_Topics_TopicID",
+                        column: x => x.TopicID,
+                        principalTable: "Topics",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -229,6 +256,16 @@ namespace IronRod.Migrations
                 name: "IX_Passages_ApplicationUserId",
                 table: "Passages",
                 column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PassageTopics_PassageID",
+                table: "PassageTopics",
+                column: "PassageID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PassageTopics_TopicID",
+                table: "PassageTopics",
+                column: "TopicID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PassageVerses_PassageID",
@@ -274,10 +311,10 @@ namespace IronRod.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PassageVerses");
+                name: "PassageTopics");
 
             migrationBuilder.DropTable(
-                name: "Topics");
+                name: "PassageVerses");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -293,6 +330,9 @@ namespace IronRod.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Topics");
 
             migrationBuilder.DropTable(
                 name: "Passages");

@@ -2,6 +2,7 @@
 
 var takenVerses = []; 
 var selectedVerses = []; 
+$("#select_button").hide();
 
 function selectVerse(verse, id){
     if(selectedVerses.includes(id)){

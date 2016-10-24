@@ -1,16 +1,31 @@
 @model List<Passage>
-    
+
+@section Scripts {
+    <script src="~/lib/angular/angular.min.js"></script> 
+    <script src="~/js/simpleControls.js"></script>
+    <script src="~/js/app-passage.js"></script>
+    <script src="~/js/passageController.js"></script>
+}
+
+<div ng-app="app-passage">
+
 <h3>All Passages</h3>
 <br>
-<table>
-    <tr>
-        <th>Passage</th><th>Level</th><th>Date Passed</th>
-    </tr>
-@foreach(var passage in Model) {
-    <tr>
-        <td><a asp-action="Detail" asp-route-id="@passage.ID">@passage.Title</a></td>
-        <td>@passage.Level</td>
-        <td>@passage.DatePassed.ToString("MM/dd/yyyy")</td>
-    </tr> 
-}
-</table>
+
+<div ng-controller="passageController as vm" ng-cloak>
+    <div class="text-danger" ng-show="vm.errorMessage">{{ vm.errorMessage }} </div>
+    <wait-cursor display-when="vm.isBusy"></wait-cursor>
+    <table class="table table-responsive table-striped" ng-show="vm.passages.length">
+        <tr>
+            <th>Passage</th><th>Level</th><th>Date Passed</th>
+        </tr>
+        <tr ng-repeat="passage in vm.passages">
+            <td><a ng-href="/passages/detail/{{passage.id}}" >{{ passage.title }}</a></td>
+            <td>{{ passage.level }}</td>
+            <td>{{ passage.datePassed | date:'EEE, MMM d' }}</td>
+        </tr>
+    </table>
+</div> 
+
+
+</div> 

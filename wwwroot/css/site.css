@@ -77,10 +77,6 @@ textarea {
     margin-left:20px;
 }
 
-.hidden {
-    display: none;
-}
-
 th {
     padding-bottom: 10px;
     font-style: italic;
@@ -90,3 +86,6 @@ td, th {
     padding-right:30px;
 }
 
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}

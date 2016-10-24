@@ -6,10 +6,18 @@ namespace IronRod.Models
     public class Topic
     {
         public int ID { get; set; }
+        [Required]
         public string UserName {get; set;}
         [Required]
         public string Title { get; set; }
         public List<PassageTopic> PassageTopics { get; set; }
+    }
+
+    public class TopicViewModel {
+        [Required]
+        public int ID { get; set; }
+        [Required]
+        public string Title { get; set; }
     }
 
     public class PassageTopic
@@ -21,8 +29,10 @@ namespace IronRod.Models
         }
         public int ID {get;set;}
         public int PassageID {get;set;}
+        [Required]
         public Passage Passage {get;set;}
         public int TopicID {get;set;}
+        [Required]
         public Topic Topic {get;set;}
     }
 }

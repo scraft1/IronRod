@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using IronRod.Data;
 using IronRod.Models; 
 
-namespace IronRod.Controllers
+namespace IronRod.Controllers.Web
 {
     [Authorize]
     public class PassagesController : Controller
@@ -49,12 +49,13 @@ namespace IronRod.Controllers
             return View(passage);
         }
         [HttpPost] 
-        public IActionResult Delete(int id){
+        public async Task<IActionResult> Delete(int id){
             var passage = _repository.GetPassageById(id);
             if(passage == null) return View("Error"); 
-            
+
             _repository.RemovePassage(passage); 
-            return RedirectToAction("List"); 
+            if(await _repository.SaveChangesAsync()) return RedirectToAction("List");    
+            return BadRequest("Failed to remove the passage");
         }
         public IActionResult Create(CreatePassageModel cpm){
             var verseids = cpm.GetVerseIds();
@@ -74,7 +75,7 @@ namespace IronRod.Controllers
                 verseids = verseids
             });
         }
-        public IActionResult AddPassage(string title, List<int> verseids){
+        public async Task<IActionResult> AddPassage(string title, List<int> verseids){
             var passage = new Passage();
             passage.UserName = User.Identity.Name;
             passage.Title = title;
@@ -84,16 +85,19 @@ namespace IronRod.Controllers
                     if(verse == null) return View("Error"); 
                     var pv = new PassageVerse(passage, verse);
                     _repository.AddPassageVerse(pv);
-                } 
+                }
+                passage.FirstVerse = verseids[0];
             } catch(Exception ex){
                 _logger.LogError($"Failed to create new passage: {ex.Message}");
                 return View("Error");
             }
             _repository.AddPassage(passage);
-            return RedirectToAction("List"); 
+
+            if(await _repository.SaveChangesAsync()) return RedirectToAction("List");    
+            return BadRequest("Failed to add the passage");
         }
 
-        public IActionResult AddTopic(int id, int topicid){
+        public async Task<IActionResult> AddTopic(int id, int topicid){
             var passage = _repository.GetPassageById(id);
             var topic = _repository.GetTopicById(topicid);
             if(passage == null || topic == null) return View("Error"); 
@@ -101,10 +105,11 @@ namespace IronRod.Controllers
             var pt = new PassageTopic(passage, topic);
             _repository.AddPassageTopic(pt);
 
-            return RedirectToAction("Detail", new {id = id});
+            if(await _repository.SaveChangesAsync()) return RedirectToAction("Detail", new {id = id});  
+            return BadRequest("Failed to add the topic");
         }
 
-        public IActionResult RemovePassageTopic(int id, int topicid){
+        public async Task<IActionResult> RemovePassageTopic(int id, int topicid){
             var passage = _repository.GetPassageById(id);
             var topic = _repository.GetTopicById(topicid);
             if(passage == null || topic == null) return View("Error"); 
@@ -112,7 +117,8 @@ namespace IronRod.Controllers
             var passagetopic = _repository.GetPassageTopic(passage, topic);
             _repository.RemovePassageTopic(passagetopic);
             
-            return RedirectToAction("Detail", new {id = id});
+            if(await _repository.SaveChangesAsync()) return RedirectToAction("Detail", new {id = id});  
+            return BadRequest("Failed to remove the topic");
         }
     }
 }

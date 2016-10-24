@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq; 
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore; 
 using Microsoft.Extensions.Logging;
 using IronRod.Models;
@@ -16,6 +17,10 @@ namespace IronRod.Data
             _logger = logger; 
         }
 
+        public async Task<bool> SaveChangesAsync(){
+            return (await _context.SaveChangesAsync()) > 0;
+        }
+
         // PASSAGES 
         public IEnumerable<Passage> GetAllPassagesByUser(string username){
             _logger.LogInformation("Gettting all passages from the database"); 
@@ -29,20 +34,15 @@ namespace IronRod.Data
             return _context.Passages.Include(p => p.Verses).Include(p => p.PassageTopics)
                                     .SingleOrDefault(p => p.ID == id);
         }
-        public void Pass(Passage passage){
-            passage.Passed();
-            _context.SaveChanges(); 
-        }
         public void RemovePassage(Passage passage){
             _context.Passages.Remove(passage); 
-            _context.SaveChanges();
         }
         public int CountTotalVerses(){
             return _context.PassageVerses.ToList().Count; 
         }
         public void AddPassage(Passage passage){
             _context.Passages.Add(passage);
-            _context.SaveChanges(); 
+            // add passage verses here ?? 
         }
         public void AddPassageVerse(PassageVerse pv){
             _context.PassageVerses.Add(pv);
@@ -73,22 +73,18 @@ namespace IronRod.Data
         }
         public void AddTopic(Topic topic){
             _context.Topics.Add(topic); 
-            _context.SaveChanges();
         }
         public void RemoveTopic(Topic topic){
             _context.Topics.Remove(topic); 
-            _context.SaveChanges(); 
         }
         public void EditTopic(Topic topic){
             var t = GetTopicById(topic.ID);
             t.Title = topic.Title;
-            _context.SaveChanges(); 
         }
 
         // PASSAGE TOPICS 
         public void AddPassageTopic(PassageTopic passagetopic){
             _context.PassageTopics.Add(passagetopic);
-            _context.SaveChanges(); 
         }
         public IEnumerable<Topic> GetTopicsByPassage(Passage passage){
             return _context.PassageTopics.Where(pt => pt.Passage == passage)
@@ -104,7 +100,6 @@ namespace IronRod.Data
         }
         public void RemovePassageTopic(PassageTopic passagetopic){
             _context.PassageTopics.Remove(passagetopic);
-            _context.SaveChanges();
         }
     }
 }

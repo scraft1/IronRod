@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using IronRod.Data;
 using IronRod.Models; 
 
-namespace IronRod.Controllers
+namespace IronRod.Controllers.Web
 {
     [Authorize]
     public class ReviewController : Controller
@@ -27,11 +27,13 @@ namespace IronRod.Controllers
             if(passage == null) return View("Error");
             return View(passage);
         }
-        public IActionResult Passed(int id){
+        public async Task<IActionResult> Passed(int id){
             var passage = _repository.GetPassageById(id);
             if(passage == null) return View("Error");
-            _repository.Pass(passage);
-            return RedirectToAction("List");
+            passage.Passed();
+
+            if(await _repository.SaveChangesAsync()) return RedirectToAction("List");    
+            return BadRequest("Failed to remove the passage");
         }
     }
 }
