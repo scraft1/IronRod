@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore; 
+using Microsoft.Extensions.Logging;
 using IronRod.Data;
 using IronRod.Models; 
 
@@ -15,12 +16,21 @@ namespace IronRod.Controllers.Web
     public class ReviewController : Controller
     {
         private IPassagesRepository _repository; 
-        public ReviewController(IPassagesRepository repository){
-            _repository = repository; 
+        private ILogger<ReviewController> _logger; 
+           
+        public ReviewController(IPassagesRepository repository,
+                                ILogger<ReviewController> logger){
+            _repository = repository;
+            _logger = logger; 
         }
         public IActionResult List(){
-            var passages = _repository.GetReviewPassagesByUser(this.User.Identity.Name);
-            return View(passages); 
+            try {
+                var passages =  _repository.GetReviewPassagesByUser(this.User.Identity.Name);
+                return View(passages);  
+            } catch (Exception ex){
+                _logger.LogError($"Failed to get review passages: {ex.Message}");
+                return View("Error");
+            }
         }
         public IActionResult Detail(int id){
             var passage = _repository.GetPassageById(id); 

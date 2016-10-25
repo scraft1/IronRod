@@ -1,20 +1,22 @@
-// passageController.js 
+// passageDetailController.js 
 
 (function (){
     "use strict";
     
     // getting existing module
-    angular.module("app-passage").controller("passageController", passageController);
+    angular.module("app-passages").controller("passageDetailController", passageDetailController);
 
-    function passageController($http) {
+    function passageDetailController($routeParams, $http) {
         var vm = this;
-        vm.passages = [];
+
+        vm.title = $routeParams.title;
+        vm.passage = {};
         vm.errorMessage = ""; 
         vm.isBusy = true;
 
-        $http.get("/api/passages") // returns a promise
+        $http.get(`/api/passages/detail/${vm.id}`) // returns a promise
             .then(function (response) { // success
-                angular.copy(response.data, vm.passages);
+                angular.copy(response.data, vm.passage);
             }, function (error) {  // failure 
                 vm.errorMessage = "Failed to load data: " + error;
             })

@@ -3,10 +3,10 @@
     var topics = ViewData["AllTopics"] as List<Topic>;
     var ptopics = ViewData["PassageTopics"] as List<Topic>;
 }
-<br>
-<a href="javascript:history.back()">&#8592; Back</a><br>
 
-<h3>@Model.Title</h3>
+<h3>
+    <button onclick="javascript:history.back()" class="btn"><i class="fa fa-angle-left"></i></button>
+    &ensp; @Model.Title</h3>
 
 @foreach(var verse in Model.Verses){
     <div class="verse">

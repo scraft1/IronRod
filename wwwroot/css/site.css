@@ -1,6 +1,13 @@
 body {
     padding-top: 50px;
     padding-bottom: 20px;
+    min-height: 100%;
+    display:flex;
+    flex-direction: column;
+    max-width:100%;
+}
+html {
+    height: 100%;
 }
 
 /* Wrapping element */
@@ -8,6 +15,7 @@ body {
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    flex:1;
 }
 
 /* Set widths on the form inputs since otherwise they're 100% wide */
@@ -50,6 +58,29 @@ textarea {
 }
 
 /* what I added */
+
+table, .navbar {
+    font-size:16px;
+}
+
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}
+
+.container {
+    max-width:100%;
+}
+
+@media screen and (max-width: 767px){
+    .container {
+        margin: 0;
+    }
+}
+
+.navbar-collapse li {
+    text-align: center;
+}
+
 .topic form {
     display: inline-block;
 }
@@ -77,15 +108,3 @@ textarea {
     margin-left:20px;
 }
 
-th {
-    padding-bottom: 10px;
-    font-style: italic;
-}
-td, th {
-    font-size:16px;
-    padding-right:30px;
-}
-
-[ng\:cloak], [ng-cloak], .ng-cloak {
-  display: none !important;
-}

@@ -7,7 +7,7 @@
 <form asp-action="Edit" asp-route-id="@Model.ID" method="post">
     <label asp-for="Title"></label> 
     <input asp-for="Title" value="@Model.Title" size="35">
-    <input type="submit" value="Save" />
+    <button type="submit"><i class="fa fa-save"></i> Save</button>
     <span asp-validation-for="Title"></span>
 
 </form> 

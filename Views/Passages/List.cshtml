@@ -1,31 +1,14 @@
-@model List<Passage>
-
 @section Scripts {
     <script src="~/lib/angular/angular.min.js"></script> 
+    <script src="~/lib/angular-route/angular-route.min.js"></script> 
     <script src="~/js/simpleControls.js"></script>
-    <script src="~/js/app-passage.js"></script>
-    <script src="~/js/passageController.js"></script>
+    <script src="~/js/app-passages.js"></script>
+    <script src="~/js/passagesController.js"></script>
+    <script src="~/js/passageDetailController.js"></script>
 }
 
-<div ng-app="app-passage">
+<div ng-app="app-passages">
 
-<h3>All Passages</h3>
-<br>
-
-<div ng-controller="passageController as vm" ng-cloak>
-    <div class="text-danger" ng-show="vm.errorMessage">{{ vm.errorMessage }} </div>
-    <wait-cursor display-when="vm.isBusy"></wait-cursor>
-    <table class="table table-responsive table-striped" ng-show="vm.passages.length">
-        <tr>
-            <th>Passage</th><th>Level</th><th>Date Passed</th>
-        </tr>
-        <tr ng-repeat="passage in vm.passages">
-            <td><a ng-href="/passages/detail/{{passage.id}}" >{{ passage.title }}</a></td>
-            <td>{{ passage.level }}</td>
-            <td>{{ passage.datePassed | date:'EEE, MMM d' }}</td>
-        </tr>
-    </table>
-</div> 
-
+    <div ng-view></div> 
 
 </div> 

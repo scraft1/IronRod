@@ -21,14 +21,14 @@ namespace IronRod.Controllers.Web
             _scriptures = scriptures;
             _smrepo = smrepo;
         }
-        public IActionResult Volumes()
-        {
-            var volumes = _scriptures.GetVolumes();
-            var sm = _smrepo.GetSMVolumes(); 
-            ViewData["SM"] = sm; 
+        // public IActionResult Volumes()
+        // {
+        //     var volumes = _scriptures.GetVolumes();
+        //     var sm = _smrepo.GetSMVolumes(); 
+        //     ViewData["SM"] = sm; 
 
-            return View(volumes);
-        }
+        //     return View(volumes);
+        // }
         public IActionResult Books(int id)
         {
             var volume = _scriptures.GetVolumeById(id);

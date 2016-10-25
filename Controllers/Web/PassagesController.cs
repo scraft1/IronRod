@@ -28,14 +28,9 @@ namespace IronRod.Controllers.Web
             _smrepo = smrepo; 
             _logger = logger;
         }
+        [Route("Passages")]
         public IActionResult List(){
-            try {
-                var passages =  _repository.GetAllPassagesByUser(this.User.Identity.Name);
-                return View(passages);  
-            } catch (Exception ex){
-                _logger.LogError($"Failed to get list of passages: {ex.Message}");
-                return View("Error");
-            }
+            return View();
         }
         public IActionResult Detail(int id){
             var passage = _repository.GetPassageById(id); 
