@@ -7,16 +7,18 @@
 
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="~/lib/bootswatch/spacelab/bootstrap.min.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/lib/bootswatch/cerulean/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" type="text/css" />
+        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
+            asp-fallback-href="~/lib/font-awesome/css/font-awesome.min.css" />
     </environment>
-        <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css">
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -28,35 +30,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">IronRod</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Iron Rod</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     @if(User.Identity.IsAuthenticated){
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                Select <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a asp-controller="Select" asp-action="Books" asp-route-id="1">Old Testament</a></li>
-                                <li><a href="/Select/Books/2">New Testament</a></li>
-                                <li><a href="/Select/Books/3">Book of Mormon</a></li>
-                                <li><a href="/Select/Books/4">Doctrine and Covenants</a></li>
-                                <li><a href="/Select/Books/5">Pearl of Great Price</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li class="dropdown-header text-center">Scipture Mastery</li>
-                                <li><a asp-controller="Select" asp-action="Sets" asp-route-id="1">Old Testament</a></li>
-                                <li><a href="/Select/Sets/2">New Testament</a></li>
-                                <li><a href="/Select/Sets/3">Book of Mormon</a></li>
-                                <li><a href="/Select/Sets/4">Doctrine and Covenants</a></li>
-                            </ul>
-                        </li>
-                        <li><a asp-area="" asp-controller="Review" asp-action="List">Review</a></li>
-                        <li><a asp-area="" asp-controller="Passages" asp-action="List">All Passages</a></li>
-                        <li><a asp-area="" asp-controller="Topic" asp-action="List">Topics</a></li>
-                        <li><a asp-area="" asp-controller="Home" asp-action="Stats">Stats</a></li>
+                        <li><a asp-controller="Select" asp-action="Volumes">Select</a></li>
+                        <li><a asp-controller="Review" asp-action="List">Review</a></li>
+                        <li><a asp-controller="Passages" asp-action="List">All Passages</a></li>
+                        <li><a asp-controller="Topic" asp-action="List">Topics</a></li>
                     }
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
@@ -66,9 +49,9 @@
         @RenderBody()
     </div>
     
-    <footer class="container">
+    <footer>
         <hr />
-        <p>&copy; 2016 - IronRod</p>
+        <p>&nbsp; &copy; 2016 - IronRod</p>
     </footer>
     
 

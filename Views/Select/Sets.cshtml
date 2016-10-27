@@ -1,10 +1,22 @@
 @model List<Set>
 
-<h3>@ViewData["Volume"]</h3>
+<div class="row">
+    <div class="col-sm-8 col-sm-offset-2">
 
-<a href="javascript:history.back()">&#8592; Back</a><br><br>
+        <h3>
+            <div class="tdVertMid">
+                <div onclick="javascript:history.back()" class="btn btn-default">
+                    <i class="fa fa-angle-left"></i></div></div>
+            <span class="tdVertMid tdTitle">@ViewData["Volume"]</span>
+        </h3>
 
-@foreach (var set in Model)
-{
-    <a asp-action="SMSet" asp-route-id="@set.id">@set.title</a><br>
-}
+        <div class="Cols1or2" >
+            @foreach (var set in Model)
+            {  
+                <div style="break-inside:avoid-column">
+                    <a asp-action="SMSet" asp-route-id="@set.id" class="btn btn-default btn-block">
+                        @set.title</a></div>
+            }
+        </div> 
+    </div>
+</div>

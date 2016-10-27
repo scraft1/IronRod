@@ -1,10 +1,21 @@
 @model List<Book>
 
-<h3>@ViewData["Volume"]</h3>
-
-<a asp-action="Volumes">&#8592; Back</a><br><br>
-
-@foreach (var book in Model)
-{
-    <a asp-action="Chapters" asp-route-id="@book.id">@book.title</a><br>
-}
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        
+        <h3>
+            <div class="tdVertMid">
+                <a asp-action="Volumes" class="btn btn-default">
+                    <i class="fa fa-angle-left"></i></a></div>
+            <span class="tdVertMid tdTitle">@ViewData["Volume"]</span>
+        </h3>
+        
+        <div class="Cols2">
+            @foreach (var book in Model)
+            {  
+                <a asp-action="Chapters" asp-route-id="@book.id" class="tile btn btn-default btn-block">
+                    @book.title</a>
+            }
+        </div> 
+    </div>
+</div>

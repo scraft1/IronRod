@@ -3,60 +3,66 @@
     var topics = ViewData["AllTopics"] as List<Topic>;
     var ptopics = ViewData["PassageTopics"] as List<Topic>;
 }
+<div class="row">
+    <div class="col-sm-offset-3 col-sm-6 verses">
+    
+        <h3>
+            <div class="tdVertMid">
+                <a asp-action="List" class="btn btn-default">
+                    <i class="fa fa-angle-left"></i></a></div>
+            <span class="tdVertMid tdTitle">@Model.Title</span>
+        </h3>
 
-<h3>
-    <button onclick="javascript:history.back()" class="btn"><i class="fa fa-angle-left"></i></button>
-    &ensp; @Model.Title</h3>
+        @foreach(var verse in Model.Verses){
+            <p>@verse.VerseNumber @Html.Raw("&nbsp;&nbsp;") @verse.VerseText</p>
+        }
 
-@foreach(var verse in Model.Verses){
-    <div class="verse">
-        @verse.VerseNumber @Html.Raw("&nbsp;&nbsp;") @verse.VerseText <br>
-    </div> 
-}
-<br><br>
+        <br>
+        @if(ptopics.Count == 1){
+            <i>Topic:</i>
+        } else if(ptopics.Count > 1){
+            <i>Topics:</i>
+        }<br>
+        @foreach(var topic in ptopics){
+            <h4>@topic.Title &emsp;
+                @Html.ActionLink(
+                        "x",
+                        "RemovePassageTopic",
+                        "Passages",
+                        new {
+                            id = @Model.ID,
+                            topicid = @topic.ID
+                        }
+                    )</h4>
+        }
 
-@if(ptopics.Count == 1){
-    <i>Topic:</i>
-} else if(ptopics.Count > 1){
-    <i>Topics:</i>
-}<br>
-@foreach(var topic in ptopics){
-    <h5>@topic.Title &emsp;
-        @Html.ActionLink(
-                "x",
-                "RemovePassageTopic",
-                "Passages",
-                new {
-                    id = @Model.ID,
-                    topicid = @topic.ID
-                }
-            )</h5>
-}
+        <br>
+        <div class="dropdown float-l">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                Add Topic &emsp;<span class="caret"></span></button>
+            <ul class="dropdown-menu">
+            @foreach(var topic in topics){
+                <li>
+                    @Html.ActionLink(
+                        @topic.Title,
+                        "AddTopic",
+                        "Passages",
+                        new {
+                            id = @Model.ID,
+                            topicid = @topic.ID
+                        }
+                    )
+                </li>
+            }
+            </ul>
+        </div>
 
-<br>
+        <form asp-action="Delete" asp-route-id="@Model.ID" method="post" class="float-r"
+                onsubmit="return confirm('Do you want to delete this passage?');">
+            <button class="btn btn-danger" type="submit">Delete Passage</button>
+        </form> 
 
-<div class="dropdown">
-    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-        Add Topic &emsp;<span class="caret"></span></button>
-    <ul class="dropdown-menu">
-    @foreach(var topic in topics){
-        <li>
-            @Html.ActionLink(
-                @topic.Title,
-                "AddTopic",
-                "Passages",
-                new {
-                    id = @Model.ID,
-                    topicid = @topic.ID
-                }
-            )
-        </li>
-    }
-    </ul>
+        
+
+    </div>
 </div>
-
-<br><br>
-<form asp-action="Delete" asp-route-id="@Model.ID" method="post"
-        onsubmit="return confirm('Do you want to delete this passage?');">
-    <button class="btn" type="submit">Delete Passage</button>
-</form> 

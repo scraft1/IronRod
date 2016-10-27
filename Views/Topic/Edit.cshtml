@@ -1,17 +1,36 @@
 @model Topic
 
-<br>
-<a href="javascript:history.back()">&#8592; Back</a>
-<br><br>
+<div class="row topics">
+    <div class="col-sm-offset-3 col-sm-6">
 
-<form asp-action="Edit" asp-route-id="@Model.ID" method="post">
-    <label asp-for="Title"></label> 
-    <input asp-for="Title" value="@Model.Title" size="35">
-    <button type="submit"><i class="fa fa-save"></i> Save</button>
-    <span asp-validation-for="Title"></span>
+        <h3>
+            <div class="tdVertMid">
+                <a href="javascript:history.back()" class="btn btn-default">
+                    <i class="fa fa-angle-left"></i></a></div>
+            <span class="tdVertMid tdTitle">Settings: @Model.Title</span>
+        </h3><br>
 
-</form> 
+        <form asp-action="Edit" asp-route-id="@Model.ID" method="post">
+            <div class="form-group">
+                <label asp-for="Title">Rename Topic</label> 
+                <input asp-for="Title" class="form-control" value="@Model.Title" />
+                <span asp-validation-for="Title"></span>
+            </div>
+            <button class="btn btn-default float-r" onclick="javascript:history.back()"
+                    style="margin-left:10px;">Cancel</button>
+            <button type="submit" class="btn btn-primary float-r">Save</button>
+        </form>
+        
+        <form asp-action="Delete" asp-route-id="@Model.ID" method="post"
+                onsubmit="return confirm('Are you sure you want to delete this topic?');">
+            <button class="btn btn-danger float-r delete-topic" type="submit">Delete Topic</button>
+        </form>
+    </div>
+</div>
+
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
+
+  

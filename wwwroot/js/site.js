@@ -2,7 +2,6 @@
 
 var takenVerses = []; 
 var selectedVerses = []; 
-$("#select_button").hide();
 
 function selectVerse(verse, id){
     if(selectedVerses.includes(id)){
@@ -14,8 +13,11 @@ function selectVerse(verse, id){
         verse.classList.add("selected");
     }
 
-    if(selectedVerses.length > 0) $("#select_button").show();
-    else $("#select_button").hide();
+    if(selectedVerses.length > 0){
+        $(".btn-select").text("Select: "+selectedVerses.length);
+        $(".btn-select").show();
+    }
+    else $(".btn-select").hide();
 }
 
 function createPassage(){

@@ -3,16 +3,23 @@
     var sm = ViewData["SM"] as List<SMVolume>;
 }
 
-<h3>Volumes</h3>
 
-@foreach (var volume in Model)
-{
-    <a asp-action="Books" asp-route-id="@volume.id">@volume.title</a><br>
-}
-
-<br>
-<h3>Scripture Mastery</h3>
-@foreach (var volume in sm)
-{
-    <a asp-action="Sets" asp-route-id="@volume.id">@volume.title</a><br>
-}
+<div class="row volumes">
+    
+    <div class="col-xs-10 col-xs-offset-1 col-sm-5 col-sm-offset-1">
+        <h3>Volumes</h3>
+        @foreach (var volume in Model)
+        {
+            <a asp-action="Books" asp-route-id="@volume.id" class="tile btn btn-default btn-lg btn-block">
+                @volume.title</a>
+        }
+    </div>
+    <div class="col-xs-10 col-xs-offset-1 col-sm-5 col-sm-offset-0">
+        <h3>Scripture Mastery</h3>
+        @foreach (var volume in sm)
+        {
+            <a asp-action="Sets" asp-route-id="@volume.id" class="tile btn btn-default btn-lg btn-block">
+                @volume.title</a>
+        }
+    </div>
+</div>

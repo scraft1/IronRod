@@ -4,17 +4,17 @@
 <div ng-cloak>
     <div class="text-danger" ng-show="vm.errorMessage">{{ vm.errorMessage }} </div>
     <wait-cursor display-when="vm.isBusy"></wait-cursor>
-    <div class="table-responsive">
+
+    <div class="table-responsive all-passages">
         <table class="table table-striped" ng-show="vm.passages.length">
             <tr>
                 <th>Passage</th><th>Level</th><th>Date Passed</th>
             </tr>
             <tr ng-repeat="passage in vm.passages">
                 <!--<td><a ng-href="#/{{passage.title}}" >{{ passage.title }}</a></td>-->
-                <td><a ng-href="/Passages/Detail/{{passage.id}}" >{{ passage.title }}</a></td>
+                <td><a ng-href="/Passages/Detail/{{passage.id}}">{{ passage.title }}</a></td>
                 <td>{{ passage.level }}</td>
                 <td>{{ passage.datePassed | date:'EEE, MMM d' }}</td>
-                <td>;alskdnf;alksdnf;askdnf;aksdfn;aslkdfn;askdlfn;aslkdfn;asdnf;</td>
             </tr>
         </table>
     </div>

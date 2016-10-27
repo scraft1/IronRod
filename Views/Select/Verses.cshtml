@@ -3,22 +3,32 @@
     var taken = ViewData["Taken"] as List<int>; 
 }
 
-<h3 id="chapter_title">@ViewData["Chapter"]</h3>
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        
+        <h3>
+            <div class="tdVertMid">
+                <div onclick="javascript:history.back()" class="btn btn-default">
+                    <i class="fa fa-angle-left"></i></div></div>
+            <span id="chapter_title" class="tdVertMid tdTitle">@ViewData["Chapter"]</span>
+        </h3>
 
-<a href="javascript:history.back()">&#8592; Back</a>
-<button id="select_button" onclick="createPassage()">Select</button><br><br>
+        <div class="Cols1or2 verses">
+            <button class="btn-select btn btn-primary btn-block" 
+                onclick="createPassage()" style="margin-bottom:5px"></button>
 
-@foreach (var verse in Model)
-{
-    <div class="verse 
-    @if(taken.Contains(@verse.id)){
-        @Html.Raw("taken")
-    }
-    else{
-        @Html.Raw("available")
-    }
-    " onclick="selectVerse(this, @verse.id)">
-        @verse.verse_number @Html.Raw("&nbsp;&nbsp;") 
-        @verse.verse_text
+            @foreach (var verse in Model)
+            {
+                <div class="tile btn btn-default btn-block 
+                @if(taken.Contains(@verse.id)){
+                    @Html.Raw("taken")
+                }
+                " onclick="selectVerse(this, @verse.id)" style="text-align:left;">
+                    @verse.verse_number @Html.Raw("&nbsp;") 
+                    @verse.verse_text
+                </div>
+            }
+            <button class="btn-select btn btn-primary btn-block" onclick="createPassage()"></button>
+        </div>
     </div>
-}
+</div>

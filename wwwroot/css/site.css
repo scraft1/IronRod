@@ -1,110 +1,91 @@
-body {
-    padding-top: 50px;
-    padding-bottom: 20px;
-    min-height: 100%;
-    display:flex;
-    flex-direction: column;
-    max-width:100%;
-}
+@import 'default.css';
+
+/*Main format*/
 html {
-    height: 100%;
+  height: 100%; /* keep footer on bottom */
 }
-
-/* Wrapping element */
-/* Set some basic padding to keep content from hitting the edges */
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+  /*keep footer on bottom*/
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
-    flex:1;
+  flex: 1; /* keep footer on bottom */
+}
+footer {
+  padding: 0 20px;
+  font-size:12px;
 }
 
-/* Set widths on the form inputs since otherwise they're 100% wide */
-input,
-select,
-textarea {
-    max-width: 280px;
-}
-
-/* Carousel */
-.carousel-caption p {
-    font-size: 20px;
-    line-height: 1.4;
-}
-
-/* buttons and links extension to use brackets: [ click me ] */
-.btn-bracketed::before {
-    display:inline-block;
-    content: "[";
-    padding-right: 0.5em;
-}
-.btn-bracketed::after {
-    display:inline-block;
-    content: "]";
-    padding-left: 0.5em;
-}
-
-/* Make .svg files in the carousel display properly in older browsers */
-.carousel-inner .item img[src$=".svg"]
-{
-    width: 100%;
-}
-
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-  /* Hide captions */
-  .carousel-caption {
-    display: none
-  }
-}
-
-/* what I added */
-
-table, .navbar {
-    font-size:16px;
-}
-
+/*Angular*/
 [ng\:cloak], [ng-cloak], .ng-cloak {
   display: none !important;
 }
 
-.container {
-    max-width:100%;
+/*Fonts*/
+.navbar, .volumes, .verses, .topics, .all-passages {
+    font-size: 16px;
 }
 
-@media screen and (max-width: 767px){
-    .container {
-        margin: 0;
-    }
+/* responsive design */
+@media screen and (max-width: 767px) {
+  .body-content{
+    margin: 0;
+    padding: 0 20px;
+  }
+  .Cols1or2 {
+    column-count: 1 !important;
+  }
+  .tdTitle {
+    padding-left: 10px;
+  }
 }
-
 .navbar-collapse li {
-    text-align: center;
+  text-align: center;
 }
 
-.topic form {
-    display: inline-block;
+/* select formatting */
+.Cols1or2, .Cols2 {
+  column-count: 2;
 }
-
-.verse {
-    max-width: 400px;
+.tile {
+  white-space: normal;
+  margin-top: 0 !important;
+  font-size: inherit !important;
+  break-inside: avoid-column;
 }
-
-.available {
-    cursor: pointer;  
+.btn-select {
+  display: none;
 }
-
+.tdVertMid {
+  display: table-cell;
+  vertical-align: middle;
+}
+.tdTitle {
+  padding-left: 20px;
+}
 .taken {
-    background-color: lightgray;
-    pointer-events: none;
-    cursor: default !important;
+  background-color: lightgray;
+  background-image: none;
+  pointer-events: none;
+  cursor: default;
 }
-
 .selected {
-    background-color: lightblue; 
-    font-weight: bold;
+  background-color: lightyellow !important;
+  background-image: none;
 }
 
-#select_button {
-    margin-left:20px;
+/*other*/
+.float-r {
+  float:right;
 }
-
+.float-l {
+  float:left;
+}
+.delete-topic {
+    clear:both;
+    margin-top: 70px;
+}

@@ -1,0 +1,14 @@
+{
+    "version": "1.0.0",
+    "name": "ironrod",
+    "private": true,
+
+    "devDependencies": {
+        "gulp": "3.9.1",
+        "gulp-concat": "2.5.2",
+        "gulp-cssmin": "0.1.7",
+        "gulp-uglify": "1.2.0",
+        "rimraf": "2.2.8",
+        "gulp-less": "3.0.2"
+    }
+}
