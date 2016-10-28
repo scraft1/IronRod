@@ -1,21 +1,26 @@
 @model Passage
 
-<br>
-<a asp-action="List">&#8592; Back</a><br>
+<div class="row verses">
+    <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+        
+        <h3>
+            <div class="tdVertMid">
+                <a asp-action="List" class="btn btn-default">
+                    <i class="fa fa-angle-left"></i></a></div>
+            <span class="tdVertMid tdTitle">@Model.Title</span>
+        </h3>
 
-<h3>@Model.Title</h3>
 
-<div class="passage">
-@foreach(var verse in Model.Verses){
-    <div class="verse">
-        @verse.VerseNumber @Html.Raw("&nbsp;&nbsp;") @verse.VerseText <br>
-    </div> 
-}
-</div> 
+        @foreach(var verse in Model.Verses){
+            <p>@verse.VerseNumber @Html.Raw("&ensp;") @verse.VerseText</p> 
+        }
 
-<br>
-@if(Model.DatePassed != DateTime.Today || Model.Level == 0){
-    <form asp-action="Passed" asp-route-id="@Model.ID" method="post">
-        <button type="submit">Passed</button>
-    </form> 
-}
+        <br>
+        @if(Model.DatePassed != DateTime.Today || Model.Level == 0){
+            <form asp-action="Passed" asp-route-id="@Model.ID" method="post">
+                <button type="submit" class="btn btn-success pull-right">Passed</button>
+            </form> 
+        }
+
+    </div>
+</div>

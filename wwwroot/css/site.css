@@ -26,7 +26,7 @@ footer {
 }
 
 /*Fonts*/
-.navbar, .volumes, .verses, .topics, .all-passages {
+.navbar, .volumes, .verses, .topics, .my-tables {
     font-size: 16px;
 }
 
@@ -79,13 +79,16 @@ footer {
 }
 
 /*other*/
-.float-r {
-  float:right;
-}
-.float-l {
-  float:left;
-}
 .delete-topic {
     clear:both;
     margin-top: 70px;
+}
+
+/*adding topics */
+.dropdown-menu {
+  min-width:280px;
+}
+.dropdown-menu>li>a {
+  white-space: normal !important;
+  /*padding: 3px 8px;*/
 }

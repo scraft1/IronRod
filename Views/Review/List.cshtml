@@ -1,21 +1,24 @@
 @model List<Passage>
 
-<h3>Review</h3>
-<br>
+<div class="row">
+    <div class="col-md-offset-2 col-md-8">
+       
+        <h3>Review</h3>
+        
+        <br>
+        <div class="table-responsive my-tables">
+            <table class="table table-striped">
+                <tr>
+                    <th>Passage</th><th>Level</th>
+                </tr>
+            @foreach(var passage in Model) {
+                <tr>
+                    <td><a asp-action="Detail" asp-route-id="@passage.ID">@passage.Title</a></td>
+                    <td>@passage.Level</td>
+                </tr> 
+            }
+            </table>
+        </div>
 
-<div class="table-responsive">
-    <table class="table table-striped">
-        <tr>
-            <th>Passage</th><th>Level</th>
-        </tr>
-    @foreach(var passage in Model) {
-        <tr>
-            <td><a asp-action="Detail" asp-route-id="@passage.ID">@passage.Title</a></td>
-            <td>@passage.Level</td>
-        </tr> 
-    }
-    </table>
-</div>
-
-<br>
-<p>Show passed today?</p> 
+    </div>
+</div> 

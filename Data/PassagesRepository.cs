@@ -95,7 +95,8 @@ namespace IronRod.Data
                                         .Select(pt => pt.Passage).ToList();
         }
         public PassageTopic GetPassageTopic(Passage passage, Topic topic){
-            return _context.PassageTopics.SingleOrDefault(pt => pt.Passage == passage 
+            // TODO: change this to single or default
+            return _context.PassageTopics.FirstOrDefault(pt => pt.Passage == passage 
                                                             && pt.Topic == topic);
         }
         public void RemovePassageTopic(PassageTopic passagetopic){

@@ -7,8 +7,8 @@
 
         @foreach (var topic in Model)
         {
-            <a asp-action="Detail" asp-route-id="@topic.ID" class="tile btn btn-default">
-                @topic.Title</a><br>
+            <a asp-action="Detail" asp-route-id="@topic.ID" class="tile btn btn-default btn-block">
+                @topic.Title</a>
         }
     </div>
 

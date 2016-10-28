@@ -1,6 +1,6 @@
 @model Passage
 @{
-    var topics = ViewData["AllTopics"] as List<Topic>;
+    var topics = ViewData["AvailableTopics"] as List<Topic>;
     var ptopics = ViewData["PassageTopics"] as List<Topic>;
 }
 <div class="row">
@@ -8,7 +8,7 @@
     
         <h3>
             <div class="tdVertMid">
-                <a asp-action="List" class="btn btn-default">
+                <a href="javascript:history.back()" class="btn btn-default">
                     <i class="fa fa-angle-left"></i></a></div>
             <span class="tdVertMid tdTitle">@Model.Title</span>
         </h3>
@@ -18,10 +18,8 @@
         }
 
         <br>
-        @if(ptopics.Count == 1){
-            <i>Topic:</i>
-        } else if(ptopics.Count > 1){
-            <i>Topics:</i>
+        @if(ptopics.Count > 0){
+            <i>Topic(s):</i>
         }<br>
         @foreach(var topic in ptopics){
             <h4>@topic.Title &emsp;
@@ -37,12 +35,14 @@
         }
 
         <br>
-        <div class="dropdown float-l">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                Add Topic &emsp;<span class="caret"></span></button>
+        <div class="btn-group pull-left">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" 
+                aria-haspopup="true" aria-expanded="false" style="width:100%;">
+                Add Topic &emsp;<span class="caret"></span>
+            </button>
             <ul class="dropdown-menu">
             @foreach(var topic in topics){
-                <li>
+                <li style="white-space:normal; overflow:visible; width:100%;">
                     @Html.ActionLink(
                         @topic.Title,
                         "AddTopic",
@@ -57,7 +57,7 @@
             </ul>
         </div>
 
-        <form asp-action="Delete" asp-route-id="@Model.ID" method="post" class="float-r"
+        <form asp-action="Delete" asp-route-id="@Model.ID" method="post" class="pull-right"
                 onsubmit="return confirm('Do you want to delete this passage?');">
             <button class="btn btn-danger" type="submit">Delete Passage</button>
         </form> 

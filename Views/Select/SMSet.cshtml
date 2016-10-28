@@ -1,7 +1,5 @@
 @model SMSetViewModel
 
-
-
 <div class="row">
     <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         
@@ -12,11 +10,6 @@
             <span class="tdVertMid tdTitle">@Model.Title</span>
         </h3>
 
-        @if(@Model.Taken.Count == 0){
-            <button class="btn btn-primary btn-block" 
-                onclick="selectSMSet(@Model.Id)" style="margin:15px 0px;">Select</button>
-        }
-
         @foreach (var verse in Model.Verses)
         {
             <p class=" 
@@ -25,6 +18,11 @@
             }" style="padding:5px;">
                 @verse.verse_number @Html.Raw("&nbsp;") @verse.verse_text
             </p>
+        }
+
+        @if(@Model.Taken.Count == 0){
+            <button class="btn btn-primary btn-block" 
+                onclick="selectSMSet(@Model.Id)" style="margin:15px 0px;">Select</button>
         }
 
     </div>

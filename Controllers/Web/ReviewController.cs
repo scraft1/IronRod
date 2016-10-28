@@ -26,6 +26,7 @@ namespace IronRod.Controllers.Web
         public IActionResult List(){
             try {
                 var passages =  _repository.GetReviewPassagesByUser(this.User.Identity.Name);
+                // TODO: get passed today 
                 return View(passages);  
             } catch (Exception ex){
                 _logger.LogError($"Failed to get review passages: {ex.Message}");

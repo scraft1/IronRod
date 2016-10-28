@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore; 
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Serialization;
 using IronRod.Data;
 using IronRod.Models; 
 
@@ -38,8 +39,9 @@ namespace IronRod.Controllers.Web
 
             var passagetopics = _repository.GetTopicsByPassage(passage);
             var alltopics = _repository.GetTopicsByUser(this.User.Identity.Name);
+            var availabletopics = alltopics.Except(passagetopics).ToList();
             ViewData["PassageTopics"] = passagetopics; 
-            ViewData["AllTopics"] = alltopics;
+            ViewData["AvailableTopics"] = availabletopics;
 
             return View(passage);
         }
@@ -95,9 +97,10 @@ namespace IronRod.Controllers.Web
         public async Task<IActionResult> AddTopic(int id, int topicid){
             var passage = _repository.GetPassageById(id);
             var topic = _repository.GetTopicById(topicid);
-            if(passage == null || topic == null) return View("Error"); 
+            var pt = _repository.GetPassageTopic(passage, topic);
+            if(passage == null || topic == null || pt != null) return View("Error"); 
 
-            var pt = new PassageTopic(passage, topic);
+            pt = new PassageTopic(passage, topic);
             _repository.AddPassageTopic(pt);
 
             if(await _repository.SaveChangesAsync()) return RedirectToAction("Detail", new {id = id});  
