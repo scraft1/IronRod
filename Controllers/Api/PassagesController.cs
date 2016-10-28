@@ -26,16 +26,26 @@ namespace IronRod.Controllers.Api
             _repository = repository; 
             _logger = logger;
         }
-       [HttpGet("")]
+        [HttpGet("")]
         public IActionResult GetAllPassages(){
             try {
-                var results = _repository.GetAllPassagesByUser(this.User.Identity.Name);
+                var results = _repository.GetAllPassagesByUser(this.User.Identity.Name); 
                 return Ok(Mapper.Map<IEnumerable<PassageViewModel>>(results));
             } catch (Exception ex){
-                _logger.LogError($"Failed to get review passages: {ex}");
+                _logger.LogError($"Failed to get all passages: {ex}");
                 return BadRequest("Error occurred");
             }
-            
+        }
+
+        [HttpGet("backup")]
+        public IActionResult GetPassagesBackup(){
+            try {
+                var results = _repository.GetPassagesWithVerses(this.User.Identity.Name); 
+                return Ok(Mapper.Map<IEnumerable<PassageBackup>>(results));
+            } catch (Exception ex){
+                _logger.LogError($"Failed to get backup passages: {ex}");
+                return BadRequest("Error occurred");
+            }
         }
         // [HttpPost("")]
         // public async Task<IActionResult> Post([FromBody] PassageViewModel pvm){

@@ -8,7 +8,7 @@
     
         <h3>
             <div class="tdVertMid">
-                <a href="javascript:history.back()" class="btn btn-default">
+                <a href="javascript:history.go(-1)" class="btn btn-default">
                     <i class="fa fa-angle-left"></i></a></div>
             <span class="tdVertMid tdTitle">@Model.Title</span>
         </h3>
@@ -61,8 +61,18 @@
                 onsubmit="return confirm('Do you want to delete this passage?');">
             <button class="btn btn-danger" type="submit">Delete Passage</button>
         </form> 
-
         
-
+        @if(User.IsInRole("Privileged")){
+             <form asp-action="SetLevel" asp-route-id="@Model.ID" method="post" 
+                    class="form-inline" style="margin-top:100px;">
+                <label for="level" class="sr-only">Set Level</label>
+                <input type="number" min="0" step="1" value="@Model.Level" class="form-control" name="level"/>
+                <button type="submit" class="btn btn-default">Set Level</button>
+            </form>     
+        }
     </div>
 </div>
+
+<script>
+    
+</script>

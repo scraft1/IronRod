@@ -14,7 +14,7 @@
         </h3><br>
 
         @if(passages.Count == 0){
-            <p>No assigned passages</p>
+            <p style="text-align:center;">No assigned passages</p>
         }
         @foreach(var passage in passages){
             <a asp-controller="Passages" asp-action="Detail" asp-route-id="@passage.ID" class="tile btn btn-block btn-default">

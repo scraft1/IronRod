@@ -15,11 +15,21 @@
         $http.get("/api/passages") // returns a promise
             .then(function (response) { // success
                 angular.copy(response.data, vm.passages);
+                vm.handleNewDatePassed();
             }, function (error) {  // failure 
                 vm.errorMessage = "Failed to load data: " + error;
             })
             .finally(function(){
                 vm.isBusy = false;
             });
+
+        vm.handleNewDatePassed = function(){
+            for(var i = 0; i < vm.passages.length; i++){
+                var p = vm.passages[i];
+                if(p.level == 0 && (Date(p.dateCreated) == Date(p.datePassed))){
+                    p.datePassed = "--";
+                }
+            }
+        }
     }
 })();

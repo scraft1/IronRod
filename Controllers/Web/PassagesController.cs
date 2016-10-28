@@ -118,5 +118,30 @@ namespace IronRod.Controllers.Web
             if(await _repository.SaveChangesAsync()) return RedirectToAction("Detail", new {id = id});  
             return BadRequest("Failed to remove the topic");
         }
+
+        [Authorize(Roles = "Privileged")]
+        [HttpPost]
+        public async Task<IActionResult> SetLevel(int id, int level){
+            var passage = _repository.GetPassageById(id);
+            if(passage == null) return View("Error"); 
+            if(level >= 0 && level != passage.Level){
+                passage.Level = level;
+                await _repository.SaveChangesAsync();  
+            }
+            return RedirectToAction("List");
+        }
+
+        // public FileResult Download(){
+        //     var passage = new Passage();
+        //     passage.DatePassed = DateTime.Now;
+        //     passage.Title = "Test passage";
+
+        //     string json = JsonConvert.SerializeObject(passage);
+        //     byte[] toBytes = Encoding.ASCII.GetBytes(json);
+        //     var file = new FileContentResult(toBytes,"application/json");
+            
+        //     return new FileContentResult();
+        // }
+        // 
     }
 }

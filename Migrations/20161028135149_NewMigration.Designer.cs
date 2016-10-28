@@ -8,9 +8,10 @@ using IronRod.Data;
 namespace IronRod.Migrations
 {
     [DbContext(typeof(PassagesDbContext))]
-    partial class PassagesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20161028135149_NewMigration")]
+    partial class NewMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1");

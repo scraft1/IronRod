@@ -26,6 +26,9 @@ namespace IronRod.Data
             _logger.LogInformation("Gettting all passages from the database"); 
             return _context.Passages.Where(p => p.UserName == username).ToList();
         }
+        public IEnumerable<Passage> GetPassagesWithVerses(string username){
+            return _context.Passages.Include(p => p.Verses).Where(p => p.UserName == username).ToList();
+        }
         public IEnumerable<Passage> GetReviewPassagesByUser(string username){
             return _context.Passages.Where(p => p.UserName == username)
             .Where(p => p.DatePassed.AddDays(p.Level) <= DateTime.Today).ToList();
@@ -71,8 +74,14 @@ namespace IronRod.Data
         public Topic GetTopicById(int id){
             return _context.Topics.SingleOrDefault(t => t.ID == id);
         }
-        public void AddTopic(Topic topic){
-            _context.Topics.Add(topic); 
+        public bool AddTopic(Topic topic){
+            var taken = _context.Topics.FirstOrDefault(t => (t.UserName == topic.UserName) 
+                                                        && (t.Title == topic.Title));
+            if(taken == null){
+                _context.Topics.Add(topic);
+                return true;
+            }  
+            return false;
         }
         public void RemoveTopic(Topic topic){
             _context.Topics.Remove(topic); 

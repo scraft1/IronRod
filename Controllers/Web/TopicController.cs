@@ -32,9 +32,9 @@ namespace IronRod.Controllers.Web
                 var topic = new Topic();
                 topic.Title = title;
                 topic.UserName = this.User.Identity.Name;
-                _repository.AddTopic(topic);
 
-                if(await _repository.SaveChangesAsync()) return RedirectToAction("List"); 
+                if(_repository.AddTopic(topic)) await _repository.SaveChangesAsync();
+                return RedirectToAction("List"); 
             }
             return BadRequest("Failed to add the topic");
         }

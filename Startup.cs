@@ -111,6 +111,8 @@ namespace IronRod
 
             Mapper.Initialize(config => {
                 config.CreateMap<PassageViewModel, Passage>().ReverseMap();
+                config.CreateMap<Passage, PassageBackup>().ForMember(dest => dest.VerseIds,
+                                    opts => opts.MapFrom(src => src.Verses.Select(v => v.VerseID)));
             });
 
             if (env.IsDevelopment())
@@ -140,7 +142,8 @@ namespace IronRod
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            seeder.PlantSeedData().Wait(); 
+            seeder.SetUserRoles().Wait(); 
+            seeder.SetDefaultPassages().Wait(); 
         }
     }
 }

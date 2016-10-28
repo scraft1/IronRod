@@ -10,6 +10,7 @@ namespace IronRod.Data
 
         // PASSAGES 
         IEnumerable<Passage> GetAllPassagesByUser(string username);
+        IEnumerable<Passage> GetPassagesWithVerses(string username);
         IEnumerable<Passage> GetReviewPassagesByUser(string username);
         Passage GetPassageById(int id);
         void RemovePassage(Passage passage);
@@ -22,7 +23,7 @@ namespace IronRod.Data
         // TOPICS 
         IEnumerable<Topic> GetTopicsByUser(string username);
         Topic GetTopicById(int id);
-        void AddTopic(Topic topic); 
+        bool AddTopic(Topic topic); 
         void RemoveTopic(Topic topic); 
         void EditTopic(Topic topic);
 
