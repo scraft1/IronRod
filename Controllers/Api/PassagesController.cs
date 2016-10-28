@@ -17,6 +17,7 @@ namespace IronRod.Controllers.Api
     public class PassagesController : Controller
     {
         private IPassagesRepository _repository; 
+        private IScripturesRepository _scriptures; 
         private ILogger<PassagesController> _logger; 
         public PassagesController(IPassagesRepository repository, 
                                 IScripturesRepository scriptures, 
@@ -24,6 +25,7 @@ namespace IronRod.Controllers.Api
                                 ILogger<PassagesController> logger)
         {
             _repository = repository; 
+            _scriptures = scriptures;
             _logger = logger;
         }
         [HttpGet("")]
@@ -46,6 +48,32 @@ namespace IronRod.Controllers.Api
                 _logger.LogError($"Failed to get backup passages: {ex}");
                 return BadRequest("Error occurred");
             }
+        }
+        [HttpPost("backup")]
+        public async Task<IActionResult> PostPassagesBackup([FromBody] IList<PassageBackup> backups){
+            var minPassages = 5;
+            if(ModelState.IsValid && backups.Count >= minPassages){
+                var passages = Mapper.Map<IEnumerable<Passage>>(backups);
+                foreach (var p in passages) {
+                    p.UserName = this.User.Identity.Name;
+                    p.FirstVerse = p.Verses.First().VerseID;
+                    foreach(var v in p.Verses) {
+                        var verse = _scriptures.GetVerseById(v.VerseID);
+                        v.ChapterID = verse.chapter_id;
+                        v.VerseNumber = verse.verse_number;
+                        v.VerseText = verse.verse_text;
+                    }
+                }
+                
+                // or keep existing verses ?? 
+                _repository.RemoveAllPassagesByUser(this.User.Identity.Name); 
+
+                _repository.AddPassages(passages);
+                if(await _repository.SaveChangesAsync()) {
+                    return Created($"api/passages/backup", "Successfully added "+backups.Count+" verses");
+                } 
+            } 
+            return BadRequest("Failed to post the passages"); 
         }
         // [HttpPost("")]
         // public async Task<IActionResult> Post([FromBody] PassageViewModel pvm){

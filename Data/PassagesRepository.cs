@@ -47,6 +47,9 @@ namespace IronRod.Data
             _context.Passages.Add(passage);
             // add passage verses here ?? 
         }
+        public void AddPassages(IEnumerable<Passage> passages){
+            _context.Passages.AddRange(passages);
+        }
         public void AddPassageVerse(PassageVerse pv){
             _context.PassageVerses.Add(pv);
         }
@@ -110,6 +113,11 @@ namespace IronRod.Data
         }
         public void RemovePassageTopic(PassageTopic passagetopic){
             _context.PassageTopics.Remove(passagetopic);
+        }
+
+        // BACKUP
+        public void RemoveAllPassagesByUser(string username){
+            _context.Passages.RemoveRange(GetAllPassagesByUser(username));
         }
     }
 }
