@@ -23,7 +23,6 @@
         </dd>
         <dt>External Logins:</dt>
         <dd>
-
             @Model.Logins.Count <a asp-controller="Manage" asp-action="ManageLogins" class="btn-bracketed">Manage</a>
         </dd>
         <dt>Phone Number:</dt>
@@ -66,6 +65,10 @@
                         <button type="submit" class="btn-link btn-bracketed">Enable</button> Disabled
                     </form>
                 }*@
+        </dd>
+        <dt>Data Backup:</dt>
+        <dd>
+            <a href="api/passages/backup" class="btn-bracketed">View JSON</a>
         </dd>
     </dl>
 </div>

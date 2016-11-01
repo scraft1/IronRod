@@ -29,9 +29,7 @@ namespace IronRod.Controllers.Web
         [HttpPost] 
         public async Task<IActionResult> Create(string title){
             if(title != null){
-                var topic = new Topic();
-                topic.Title = title;
-                topic.UserName = this.User.Identity.Name;
+                var topic = new Topic(this.User.Identity.Name, title);
 
                 if(_repository.AddTopic(topic)) await _repository.SaveChangesAsync();
                 return RedirectToAction("List"); 

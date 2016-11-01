@@ -1,6 +1,5 @@
 <div class="col-md-offset-2 col-md-8">
     <h3>Review</h3>     
-    <br>
 
     <div class="table-responsive my-tables" ng-cloak>
         <div class="text-danger" ng-show="vm.errorMessage">{{ vm.errorMessage }} </div>
@@ -8,12 +7,13 @@
 
         <table class="table table-striped" ng-show="vm.passages.length">
             <tr>
-                <th>Passage</th><th>Level</th>
+                <th>Passage</th>
+                <th class="text-center">Level</th>
             </tr>
        
             <tr ng-repeat="passage in vm.passages">
                 <td><a ng-href="#/Passage/{{passage.id}}">{{ passage.title }}</a></td>
-                <td>{{ passage.level }}</td>
+                <td class="text-center">{{ passage.level }}</td>
             </tr> 
         </table>
     </div>

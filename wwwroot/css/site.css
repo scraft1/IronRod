@@ -19,6 +19,9 @@ footer {
   padding: 0 20px;
   font-size:12px;
 }
+h3 {
+  margin-bottom:15px;
+}
 
 /*Angular*/
 [ng\:cloak], [ng-cloak], .ng-cloak {
@@ -78,17 +81,10 @@ footer {
   background-image: none;
 }
 
-/*other*/
-.delete-topic {
-    clear:both;
-    margin-top: 70px;
-}
-
 /*adding topics */
 .dropdown-menu {
   min-width:280px;
 }
 .dropdown-menu>li>a {
   white-space: normal !important;
-  /*padding: 3px 8px;*/
 }

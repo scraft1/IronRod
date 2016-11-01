@@ -9,12 +9,17 @@
     <div class="table-responsive my-tables">
         <table class="table table-striped" ng-show="vm.passages.length">
             <tr>
-                <th>Passage</th><th>Level</th><th>Date Passed</th><th>Date Created</th>
+                <th>Passage</th>
+                <th class="text-center">Topics</th>
+                <th class="text-center">Level</th>
+                <th>Date Passed</th>
+                <th>Date Created</th>
             </tr>
             <tr ng-repeat="passage in vm.passages">
                 <!--<td><a ng-href="#/{{passage.title}}" >{{ passage.title }}</a></td>-->
                 <td><a ng-href="/Passages/Detail/{{passage.id}}">{{ passage.title }}</a></td>
-                <td>{{ passage.level }}</td>
+                <td class="text-center">{{ passage.topics }}</td>
+                <td class="text-center">{{ passage.level }}</td>
                 <td>{{ passage.datePassed | date:'EEE, MMM d' }}</td>
                 <td>{{ passage.dateCreated | date:'EEE, MMM d'}}</td>
             </tr>

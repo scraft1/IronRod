@@ -24,11 +24,12 @@ namespace IronRod.Data
         // PASSAGES 
         public IEnumerable<Passage> GetAllPassagesByUser(string username){
             _logger.LogInformation("Gettting all passages from the database"); 
-            return _context.Passages.Where(p => p.UserName == username)
+            return _context.Passages.Where(p => p.UserName == username).Include(p => p.PassageTopics)
                                     .OrderByDescending(p => p.DateCreated).ToList();
         }
-        public IEnumerable<Passage> GetPassagesWithVerses(string username){
-            return _context.Passages.Include(p => p.Verses).Where(p => p.UserName == username).ToList();
+        public IEnumerable<Passage> GetBackupPassages(string username){
+            return _context.Passages.Where(p => p.UserName == username)
+                                .Include(p => p.Verses).Include(p => p.PassageTopics).ToList();
         }
         public IEnumerable<Passage> GetReviewPassagesByUser(string username){
             return _context.Passages.Where(p => p.UserName == username)
@@ -42,14 +43,11 @@ namespace IronRod.Data
             _context.Passages.Remove(passage); 
         }
         public int CountTotalVerses(string username){
-            return _context.PassageVerses.Where(pv => pv.Passage.UserName == username).ToList().Count; 
+            return _context.PassageVerses.Where(pv => pv.Passage.UserName == username).ToList().Count;
         }
         public void AddPassage(Passage passage){
             _context.Passages.Add(passage);
             // add passage verses here ?? 
-        }
-        public void AddPassages(IEnumerable<Passage> passages){
-            _context.Passages.AddRange(passages);
         }
         public void AddPassageVerse(PassageVerse pv){
             _context.PassageVerses.Add(pv);
@@ -118,8 +116,15 @@ namespace IronRod.Data
         }
 
         // BACKUP
-        public void RemoveAllPassagesByUser(string username){
+        public void RemoveAllDataByUser(string username){
             _context.Passages.RemoveRange(GetAllPassagesByUser(username));
+            _context.Topics.RemoveRange(GetTopicsByUser(username));
+        }
+        public void AddPassages(IEnumerable<Passage> passages){
+            _context.Passages.AddRange(passages);
+        }
+        public void AddTopics(IEnumerable<Topic> topics){
+            _context.Topics.AddRange(topics);
         }
     }
 }

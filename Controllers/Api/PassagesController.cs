@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore; 
 using Microsoft.Extensions.Logging;
 using AutoMapper;
 using IronRod.Data;
@@ -32,7 +31,7 @@ namespace IronRod.Controllers.Api
         public IActionResult GetAllPassages(){
             try {
                 var results = _repository.GetAllPassagesByUser(this.User.Identity.Name); 
-                return Ok(Mapper.Map<IEnumerable<PassageViewModel>>(results));
+                return Ok(Mapper.Map<IEnumerable<PassageListViewModel>>(results));
             } catch (Exception ex){
                 _logger.LogError($"Failed to get all passages: {ex}");
                 return BadRequest("Error occurred");
@@ -43,7 +42,7 @@ namespace IronRod.Controllers.Api
             try {
                 var passages =  _repository.GetReviewPassagesByUser(this.User.Identity.Name);
                 // TODO: get passed today 
-                return Ok(Mapper.Map<IEnumerable<PassageViewModel>>(passages)); // custom review view model ?? 
+                return Ok(Mapper.Map<IEnumerable<PassageListViewModel>>(passages)); // custom review view model ?? 
             } catch (Exception ex){
                 _logger.LogError($"Failed to get review passages: {ex}");
                 return BadRequest("Error occurred");
@@ -65,10 +64,13 @@ namespace IronRod.Controllers.Api
             try {
                 var passage =  _repository.GetPassageById(id);
                 // check if passage belongs to user ?? 
-                passage.Passed();
+                if(passage.DatePassed < DateTime.Today || passage.Level == 0){
+                    passage.Level = passage.Level + 1;
+                    passage.DatePassed = DateTime.Today;
+                }
 
                 if(await _repository.SaveChangesAsync()) {
-                    return Ok(Mapper.Map<PassageViewModel>(passage)); 
+                    return Ok(Mapper.Map<PassageListViewModel>(passage)); 
                 } 
             } 
             catch (Exception ex){
@@ -86,37 +88,60 @@ namespace IronRod.Controllers.Api
         }
 
         [HttpGet("backup")]
-        public IActionResult GetPassagesBackup(){
+        public IActionResult GetDataBackup(){
             try {
-                var results = _repository.GetPassagesWithVerses(this.User.Identity.Name); 
-                return Ok(Mapper.Map<IEnumerable<PassageBackup>>(results));
+                var passages = _repository.GetBackupPassages(this.User.Identity.Name); 
+                var results = new List<PassageBackup>();
+                foreach(var passage in passages){
+                    var pb = Mapper.Map<PassageBackup>(passage);
+                    pb.Topics = _repository.GetTopicsByPassage(passage).Select(t => t.Title).ToList();
+                    results.Add(pb);
+                }
+                return Ok(results);
             } catch (Exception ex){
                 _logger.LogError($"Failed to get backup passages: {ex}");
                 return BadRequest("Error occurred");
             }
         }
         [HttpPost("backup")]
-        public async Task<IActionResult> PostPassagesBackup([FromBody] IList<PassageBackup> backups){
+        public async Task<IActionResult> PostDataBackup([FromBody] IList<PassageBackup> backups){
             var minPassages = 5;
+            var username = this.User.Identity.Name;
+
             if(ModelState.IsValid && backups.Count >= minPassages){
-                var passages = Mapper.Map<IEnumerable<Passage>>(backups);
-                foreach (var p in passages) {
-                    p.UserName = this.User.Identity.Name;
-                    p.FirstVerse = p.Verses.First().VerseID;
-                    foreach(var v in p.Verses) {
+                var passages = new List<Passage>();
+                var topics = new List<Topic>();
+
+                foreach (var pb in backups) {
+                    var passage = Mapper.Map<Passage>(pb);
+                    passage.UserName = username;
+                    passage.FirstVerse = passage.Verses.First().VerseID;
+                    foreach(var v in passage.Verses) {
                         var verse = _scriptures.GetVerseById(v.VerseID);
                         v.ChapterID = verse.chapter_id;
                         v.VerseNumber = verse.verse_number;
                         v.VerseText = verse.verse_text;
                     }
+                    foreach(var t in pb.Topics){
+                        var topic = topics.FirstOrDefault(top => top.Title == t);
+                        if(topic == null){
+                            topic = new Topic(username, t);
+                            topics.Add(topic);
+                        }
+                        var pt = new PassageTopic(passage,topic);
+                        topic.PassageTopics.Add(pt);
+                    }
+                    passages.Add(passage);
                 }
                 
-                // or keep existing verses ?? 
-                _repository.RemoveAllPassagesByUser(this.User.Identity.Name); 
+                // or keep existing data ?? 
+                _repository.RemoveAllDataByUser(this.User.Identity.Name); 
 
                 _repository.AddPassages(passages);
+                _repository.AddTopics(topics);
+
                 if(await _repository.SaveChangesAsync()) {
-                    return Created($"api/passages/backup", "Successfully added "+backups.Count+" verses");
+                    return Created($"api/passages/backup", "Successfully added "+backups.Count+" passages");
                 } 
             } 
             return BadRequest("Failed to post the passages"); 

@@ -10,13 +10,12 @@ namespace IronRod.Data
 
         // PASSAGES 
         IEnumerable<Passage> GetAllPassagesByUser(string username);
-        IEnumerable<Passage> GetPassagesWithVerses(string username);
+        IEnumerable<Passage> GetBackupPassages(string username);
         IEnumerable<Passage> GetReviewPassagesByUser(string username);
         Passage GetPassageById(int id);
         void RemovePassage(Passage passage);
         int CountTotalVerses(string username);
         void AddPassage(Passage passage);
-        void AddPassages(IEnumerable<Passage> passages);
         void AddPassageVerse(PassageVerse pv);
         IEnumerable<int> GetTakenVerseIds(string username, int chapterid);
         IEnumerable<int> GetTakenSMVerseIds(string username, IEnumerable<int> ids);
@@ -36,6 +35,8 @@ namespace IronRod.Data
         void RemovePassageTopic(PassageTopic passagetopic);
 
         // BACKUP 
-        void RemoveAllPassagesByUser(string username);
+        void RemoveAllDataByUser(string username);
+        void AddPassages(IEnumerable<Passage> passages);
+        void AddTopics(IEnumerable<Topic> topics);
     }
 }

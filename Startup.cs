@@ -136,7 +136,7 @@ namespace IronRod
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
+            seeder.SetDefaultUsers().Wait(); 
             seeder.SetUserRoles().Wait(); 
             seeder.SetDefaultPassages().Wait(); 
         }
