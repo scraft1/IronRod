@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using AutoMapper;
 using IronRod.Data;
 using IronRod.Models;
 using IronRod.Services;
@@ -109,13 +108,7 @@ namespace IronRod
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug(); // parameter LogLevel.Information or Error ?? 
 
-            Mapper.Initialize(config => {
-                config.CreateMap<PassageViewModel, Passage>().ReverseMap();
-                config.CreateMap<Passage, PassageBackup>().ForMember(dest => dest.VerseIds,
-                                    opts => opts.MapFrom(src => src.Verses.Select(v => v.VerseID)));
-                config.CreateMap<PassageBackup, Passage>().ForMember(dest => dest.Verses,
-                    opts => opts.MapFrom(src => src.VerseIds.Select(v => new PassageVerse(){VerseID = v}).ToList()));
-            });
+            AutoMapperConfig.CreateMaps();
 
             if (env.IsDevelopment())
             {

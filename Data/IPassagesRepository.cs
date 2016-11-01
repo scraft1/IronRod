@@ -14,7 +14,7 @@ namespace IronRod.Data
         IEnumerable<Passage> GetReviewPassagesByUser(string username);
         Passage GetPassageById(int id);
         void RemovePassage(Passage passage);
-        int CountTotalVerses();
+        int CountTotalVerses(string username);
         void AddPassage(Passage passage);
         void AddPassages(IEnumerable<Passage> passages);
         void AddPassageVerse(PassageVerse pv);

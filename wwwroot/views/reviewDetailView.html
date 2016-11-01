@@ -1,0 +1,27 @@
+<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 verses" ng-cloak>
+    <h3>
+        <div class="tdVertMid">
+            <a href="javascript:history.back();" class="btn btn-default">
+                <i class="fa fa-angle-left"></i></a></div>
+        <span class="tdVertMid tdTitle">{{ vm.passage.title }}</span>
+    </h3>
+    <div class="text-danger" ng-show="vm.errorMessage">{{ vm.errorMessage }}</div>
+    <wait-cursor display-when="vm.isBusy"></wait-cursor>
+    
+    <p ng-repeat="verse in vm.verses">
+        {{ verse.verseNumber }} &ensp; {{ verse.verseText }}</p>
+
+    <br>
+    <div ng-show="!vm.isBusy">
+        <button ng-click="vm.hideWords()" class="btn btn-default">
+            {{ vm.hidden ? 'Show' : 'Hide' }} Words</button>            
+        
+        <button ng-if="!vm.passedToday" ng-click="vm.passed()" class="btn btn-success pull-right">
+            Passed</button> 
+    </div> 
+</div> 
+
+        
+
+        
+

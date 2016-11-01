@@ -18,12 +18,6 @@ namespace IronRod.Controllers.Web
         {
             return View();
         }
-        [Authorize] 
-        public IActionResult Stats()
-        {
-            ViewData["Total"] = _repository.CountTotalVerses();
-            return View();
-        }
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";

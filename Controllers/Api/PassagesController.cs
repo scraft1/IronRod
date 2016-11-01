@@ -38,6 +38,52 @@ namespace IronRod.Controllers.Api
                 return BadRequest("Error occurred");
             }
         }
+        [HttpGet("review")]
+        public IActionResult GetReviewList(){
+            try {
+                var passages =  _repository.GetReviewPassagesByUser(this.User.Identity.Name);
+                // TODO: get passed today 
+                return Ok(Mapper.Map<IEnumerable<PassageViewModel>>(passages)); // custom review view model ?? 
+            } catch (Exception ex){
+                _logger.LogError($"Failed to get review passages: {ex}");
+                return BadRequest("Error occurred");
+            }
+        }
+        [HttpGet("detail/{id}")]
+        public IActionResult GetPassage(int id){
+            try {
+                var passage =  _repository.GetPassageById(id);
+                // check if passage belongs to user ?? 
+                return Ok(Mapper.Map<PassageDetailViewModel>(passage));
+            } catch (Exception ex){
+                _logger.LogError($"Failed to get passage: {ex}");
+                return BadRequest("Error occurred");
+            }
+        }
+        [HttpPost("passed/{id}")]
+        public async Task<IActionResult> PassagePassed(int id){
+            try {
+                var passage =  _repository.GetPassageById(id);
+                // check if passage belongs to user ?? 
+                passage.Passed();
+
+                if(await _repository.SaveChangesAsync()) {
+                    return Ok(Mapper.Map<PassageViewModel>(passage)); 
+                } 
+            } 
+            catch (Exception ex){
+                _logger.LogError($"Failed to get and pass passage: {ex}");
+            }
+            return BadRequest("Failed to pass the passage");
+        }
+
+        [HttpGet("stats")]
+        public IActionResult GetStats(){
+            var stats = new Stats();
+            stats.TotalVerses = _repository.CountTotalVerses(this.User.Identity.Name);
+            // total passages 
+            return Ok(stats);
+        }
 
         [HttpGet("backup")]
         public IActionResult GetPassagesBackup(){

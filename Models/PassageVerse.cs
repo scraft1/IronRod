@@ -29,4 +29,12 @@ namespace IronRod.Models
         [Required]
         public int ChapterID {get; set;}
     }
+
+    // VIEW MODELS
+    public class PassageVerseViewModel {
+        public int VerseNumber {get; set;}  
+        public string VerseText {get; set;}
+
+    }
+
 }

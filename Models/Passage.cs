@@ -27,6 +27,8 @@ namespace IronRod.Models
         }
     }
 
+    // VIEW MODELS 
+
     public class PassageViewModel
     {
         public int ID {get; set;}
@@ -35,6 +37,15 @@ namespace IronRod.Models
         public DateTime DatePassed {get; set;}
         public DateTime DateCreated {get; set;}
         public int FirstVerse {get; set;}
+    }
+
+    public class PassageDetailViewModel
+    {
+        public int ID {get; set;}
+        public string Title {get; set;}
+        public int Level {get; set;}
+        public DateTime DatePassed {get; set;}
+        public IEnumerable<PassageVerseViewModel> Verses {get; set;}
     }
 
     public class PassageBackup {

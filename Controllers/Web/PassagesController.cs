@@ -90,7 +90,7 @@ namespace IronRod.Controllers.Web
             }
             _repository.AddPassage(passage);
 
-            if(await _repository.SaveChangesAsync()) return RedirectToAction("List");    
+            if(await _repository.SaveChangesAsync()) return RedirectToAction("Detail", new {id = passage.ID}); 
             return BadRequest("Failed to add the passage");
         }
 

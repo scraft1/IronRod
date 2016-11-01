@@ -8,9 +8,9 @@
         .config(function ($routeProvider) {
 
             $routeProvider.when("/", {
-                controller: "passagesController", 
+                controller: "passagesListController", 
                 controllerAs: "vm",
-                templateUrl: "/views/passagesView.html"
+                templateUrl: "/views/passagesListView.html"
             });
             // $routeProvider.when("/:title", {
             //     controller: "passageDetailController", 
