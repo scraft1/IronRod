@@ -1,0 +1,71 @@
+@model List<Passage>
+@{
+    ViewData["Title"] = "Set Levels By Group";
+}
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <h3>@ViewData["Title"]</h3>
+        
+        <div class="table-responsive my-tables">
+            <table class="table table-striped">
+                <tr>
+                    <th></th>
+                    <th>Passage</th>
+                    <th>Level</th>
+                    <th>Date Passed</th>
+                </tr>
+            @foreach (var passage in Model)
+            { 
+                <tr>
+                    <td><input type="checkbox" onclick="toggleCheckbox(@passage.ID)"/></td>
+                    <td>@passage.Title</td>
+                    <td>@passage.Level</td>
+                    <td>@passage.DatePassed.ToString("ddd, MMM d")</td>
+                </tr>
+            }
+            </table>
+        </div>
+        <form onsubmit="return setLevels()">
+            <input type="number" min="0" step="1" id="level" value="0"
+                    style="width:100px; display:inline;" class="form-control" />
+            <button type="submit" class="btn btn-default">Set Level</button>
+        </form>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    var selectedPassages = [];
+        
+    function toggleCheckbox(id){
+        if(selectedPassages.includes(id)){
+            var ind = selectedVerses.indexOf(id);
+            selectedVerses.splice(ind, 1); 
+        } else{
+            selectedPassages.push(id);
+        }
+    }
+
+    function setLevels(e){
+        var level = parseInt(document.getElementById("level").value);
+        if(!Number.isInteger(level) || level < 0){
+            return false; 
+        }
+        var url = "/api/passages/setlevel";
+        for(var i = 0; i < selectedPassages.length; i++){
+            var data = {
+                "id":selectedPassages[i],
+                "level":level
+            }
+            if(i == selectedPassages.length - 1){
+                $.post(url,data).always(function(response){
+                    location.reload();
+                });
+            } else {
+                $.post(url,data);
+            }
+        }
+        return false;
+    }
+</script>

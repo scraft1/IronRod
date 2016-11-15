@@ -8,7 +8,7 @@ using IronRod.Data;
 namespace IronRod.Migrations
 {
     [DbContext(typeof(PassagesDbContext))]
-    [Migration("20161024210442_FirstMigration")]
+    [Migration("20161101175056_FirstMigration")]
     partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,6 +71,8 @@ namespace IronRod.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ApplicationUserId");
+
+                    b.Property<DateTime>("DateCreated");
 
                     b.Property<DateTime>("DatePassed");
 

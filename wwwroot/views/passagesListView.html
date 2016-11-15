@@ -16,7 +16,6 @@
                 <th>Date Created</th>
             </tr>
             <tr ng-repeat="passage in vm.passages">
-                <!--<td><a ng-href="#/{{passage.title}}" >{{ passage.title }}</a></td>-->
                 <td><a ng-href="/Passages/Detail/{{passage.id}}">{{ passage.title }}</a></td>
                 <td class="text-center">{{ passage.topics }}</td>
                 <td class="text-center">{{ passage.level }}</td>

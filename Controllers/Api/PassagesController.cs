@@ -87,6 +87,27 @@ namespace IronRod.Controllers.Api
             return Ok(stats);
         }
 
+        [Authorize(Roles = "Privileged")]
+        [HttpPost("setlevel")]
+        public async Task<IActionResult> SetLevel(int id, int level){
+            try {
+                Console.WriteLine("id: "+id);
+                Console.WriteLine("level: "+level);
+                var passage = _repository.GetPassageById(id);
+                if(passage == null) return BadRequest("Passage is null");
+
+                else if(level == passage.Level) return StatusCode(304);
+                else if(level >= 0){
+                    passage.Level = level;
+                    await _repository.SaveChangesAsync();  
+                    return StatusCode(200);
+                }
+            } catch (Exception ex){
+                _logger.LogError($"Failed to set level for passage: {ex}");
+            }
+            return BadRequest("Failed to set level for passage");
+        }
+
         [HttpGet("backup")]
         public IActionResult GetDataBackup(){
             try {
@@ -103,6 +124,8 @@ namespace IronRod.Controllers.Api
                 return BadRequest("Error occurred");
             }
         }
+
+        [Authorize(Roles = "Privileged")]
         [HttpPost("backup")]
         public async Task<IActionResult> PostDataBackup([FromBody] IList<PassageBackup> backups){
             var minPassages = 5;

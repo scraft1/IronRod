@@ -118,6 +118,12 @@ namespace IronRod.Controllers.Web
         }
 
         [Authorize(Roles = "Privileged")]
+        public IActionResult Privileged(){
+            var passages = _repository.GetAllPassagesByUser(this.User.Identity.Name);
+            return View(passages);
+        }
+
+        [Authorize(Roles = "Privileged")]
         [HttpPost]
         public async Task<IActionResult> SetLevel(int id, int level){
             var passage = _repository.GetPassageById(id);

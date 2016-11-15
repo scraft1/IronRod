@@ -68,6 +68,7 @@ namespace IronRod.Migrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Autoincrement", true),
                     ApplicationUserId = table.Column<string>(nullable: true),
+                    DateCreated = table.Column<DateTime>(nullable: false),
                     DatePassed = table.Column<DateTime>(nullable: false),
                     FirstVerse = table.Column<int>(nullable: false),
                     Level = table.Column<int>(nullable: false),

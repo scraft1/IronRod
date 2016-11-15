@@ -70,5 +70,12 @@
         <dd>
             <a href="api/passages/backup" class="btn-bracketed">View JSON</a>
         </dd>
+        @if(User.IsInRole("Privileged")){
+            <dt>Privileged Role:</dt>
+            <dd>
+                <a asp-controller="Passages" asp-action="Privileged" class="btn-bracketed">Set levels by group</a>
+            </dd>
+        }
+        
     </dl>
 </div>
