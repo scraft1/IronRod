@@ -27,6 +27,19 @@ namespace IronRod.Models
         public string Title {get;set;}
     }
 
+    public class ReviewTopicViewModel {
+        [Required]
+        public int ID {get;set;}
+        [Required]
+        public string Title {get;set;}
+        public int Count {get;set;}
+        public ReviewTopicViewModel(int id, string title, int count) {
+            ID = id;
+            Title = title;
+            Count = count;
+        }
+    }
+
     public class PassageTopic
     {
         public PassageTopic(){}

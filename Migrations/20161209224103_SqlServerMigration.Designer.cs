@@ -8,9 +8,10 @@ using IronRod.Data;
 namespace IronRod.Migrations
 {
     [DbContext(typeof(PassagesDbContext))]
-    partial class PassagesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20161209224103_SqlServerMigration")]
+    partial class SqlServerMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")

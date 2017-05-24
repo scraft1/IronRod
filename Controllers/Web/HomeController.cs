@@ -5,8 +5,8 @@ namespace IronRod.Controllers.Web
 {
     public class HomeController : Controller
     {
-        private IPassagesRepository _repository; 
-        public HomeController(IPassagesRepository repository){
+        private IPassageRepository _repository; 
+        public HomeController(IPassageRepository repository){
             _repository = repository; 
         }
         public IActionResult Index()

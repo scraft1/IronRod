@@ -15,36 +15,29 @@ namespace IronRod.Controllers.Api
     [Route("api/passages")]
     public class PassagesController : Controller
     {
-        private IPassagesRepository _repository; 
+        private IPassageRepository _repository; 
+        private ITopicRepository _topics;
         private IScripturesRepository _scriptures; 
         private ILogger<PassagesController> _logger; 
-        public PassagesController(IPassagesRepository repository, 
+        public PassagesController(IPassageRepository repository,
+                                ITopicRepository topics, 
                                 IScripturesRepository scriptures, 
                                 IScriptureMasteryRepository smrepo,
                                 ILogger<PassagesController> logger)
         {
             _repository = repository; 
+            _topics = topics;
             _scriptures = scriptures;
             _logger = logger;
         }
         [HttpGet("")]
         public IActionResult GetAllPassages(){
             try {
+                //var results = _repository.GetAllPassagesWithoutTopicsByUser(this.User.Identity.Name); 
                 var results = _repository.GetAllPassagesByUser(this.User.Identity.Name); 
                 return Ok(Mapper.Map<IEnumerable<PassageListViewModel>>(results));
             } catch (Exception ex){
                 _logger.LogError($"Failed to get all passages: {ex}");
-                return BadRequest("Error occurred");
-            }
-        }
-        [HttpGet("review")]
-        public IActionResult GetReviewList(){
-            try {
-                var passages =  _repository.GetReviewPassagesByUser(this.User.Identity.Name);
-                // TODO: get passed today 
-                return Ok(Mapper.Map<IEnumerable<PassageListViewModel>>(passages)); // custom review view model ?? 
-            } catch (Exception ex){
-                _logger.LogError($"Failed to get review passages: {ex}");
                 return BadRequest("Error occurred");
             }
         }
@@ -59,53 +52,12 @@ namespace IronRod.Controllers.Api
                 return BadRequest("Error occurred");
             }
         }
-        [HttpPost("passed/{id}")]
-        public async Task<IActionResult> PassagePassed(int id){
-            try {
-                var passage =  _repository.GetPassageById(id);
-                // check if passage belongs to user ?? 
-                if(passage.DatePassed < DateTime.Today || passage.Level == 0){
-                    passage.Level = passage.Level + 1;
-                    passage.DatePassed = DateTime.Today;
-                }
-
-                if(await _repository.SaveChangesAsync()) {
-                    return Ok(Mapper.Map<PassageListViewModel>(passage)); 
-                } 
-            } 
-            catch (Exception ex){
-                _logger.LogError($"Failed to get and pass passage: {ex}");
-            }
-            return BadRequest("Failed to pass the passage");
-        }
-
         [HttpGet("stats")]
         public IActionResult GetStats(){
             var stats = new Stats();
             stats.TotalVerses = _repository.CountTotalVerses(this.User.Identity.Name);
             // total passages 
             return Ok(stats);
-        }
-
-        [Authorize(Roles = "Privileged")]
-        [HttpPost("setlevel")]
-        public async Task<IActionResult> SetLevel(int id, int level){
-            try {
-                Console.WriteLine("id: "+id);
-                Console.WriteLine("level: "+level);
-                var passage = _repository.GetPassageById(id);
-                if(passage == null) return BadRequest("Passage is null");
-
-                else if(level == passage.Level) return StatusCode(304);
-                else if(level >= 0){
-                    passage.Level = level;
-                    await _repository.SaveChangesAsync();  
-                    return StatusCode(200);
-                }
-            } catch (Exception ex){
-                _logger.LogError($"Failed to set level for passage: {ex}");
-            }
-            return BadRequest("Failed to set level for passage");
         }
 
         [HttpGet("backup")]
@@ -115,7 +67,7 @@ namespace IronRod.Controllers.Api
                 var results = new List<PassageBackup>();
                 foreach(var passage in passages){
                     var pb = Mapper.Map<PassageBackup>(passage);
-                    pb.Topics = _repository.GetTopicsByPassage(passage).Select(t => t.Title).ToList();
+                    pb.Topics = _topics.GetTopicsByPassage(passage).Select(t => t.Title).ToList();
                     results.Add(pb);
                 }
                 return Ok(results);
@@ -158,10 +110,12 @@ namespace IronRod.Controllers.Api
                 }
                 
                 // or keep existing data ?? 
-                _repository.RemoveAllDataByUser(this.User.Identity.Name); 
+                _repository.RemoveAllDataByUser(username); 
 
-                _repository.AddPassages(passages);
-                _repository.AddTopics(topics);
+                // doesn't maintain order of passages or passage verses; sorting needed when querying 
+                // add passages and passage verses individually to keep order in database
+                _repository.AddPassages(passages); 
+                _topics.AddTopics(topics);
 
                 if(await _repository.SaveChangesAsync()) {
                     return Created($"api/passages/backup", "Successfully added "+backups.Count+" passages");

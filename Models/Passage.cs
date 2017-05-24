@@ -40,6 +40,7 @@ namespace IronRod.Models
         public int Level {get;set;}
         public DateTime DatePassed {get;set;}
         public IEnumerable<PassageVerseViewModel> Verses {get;set;}
+        public IEnumerable<TopicViewModel> PassageTopics {get;set;}
     }
 
     public class PassageBackup {

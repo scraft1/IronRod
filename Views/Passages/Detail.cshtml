@@ -61,14 +61,14 @@
             <button class="btn btn-danger" type="submit">Delete Passage</button>
         </form> 
         
-        <!--@if(User.IsInRole("Privileged")){
+        @if(User.IsInRole("Privileged")){
             <form asp-action="SetLevel" asp-route-id="@Model.ID" method="post" style="margin-top:100px;">
                 <label for="level" class="sr-only">Set Level</label>
                 <input type="number" min="0" step="1" value="@Model.Level" name="level" 
                         style="width:100px; display:inline;" class="form-control" />
                 <button type="submit" class="btn btn-default">Set Level</button>
             </form>     
-        }-->
+        }
     </div>
 </div>
 

@@ -8,9 +8,14 @@
         .config(function ($routeProvider) {
 
             $routeProvider.when("/", {
-                controller: "reviewListController", 
+                controller: "reviewTopicsListController", 
                 controllerAs: "vm",
-                templateUrl: "/views/reviewListView.html"
+                templateUrl: "/views/reviewTopicsListView.html"
+            });
+            $routeProvider.when("/Topic/:id", {
+                controller: "reviewTopicPassagesController", 
+                controllerAs: "vm",
+                templateUrl: "/views/reviewTopicPassagesView.html"
             });
             $routeProvider.when("/Passage/:id", {
                 controller: "reviewDetailController", 

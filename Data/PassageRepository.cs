@@ -8,12 +8,17 @@ using IronRod.Models;
 
 namespace IronRod.Data
 {
-    public class PassagesRepository : IPassagesRepository
+    public class PassageRepository : IPassageRepository
     {
         private PassagesDbContext _context;
-        private ILogger<PassagesRepository> _logger;
-        public PassagesRepository(PassagesDbContext context, ILogger<PassagesRepository> logger){
+        private ITopicRepository _topics;
+        private ILogger<PassageRepository> _logger;
+        
+        public PassageRepository(PassagesDbContext context, 
+                                ITopicRepository topics,
+                                ILogger<PassageRepository> logger){
             _context = context;
+            _topics = topics;
             _logger = logger; 
         }
 
@@ -23,8 +28,12 @@ namespace IronRod.Data
 
         // PASSAGES 
         public IEnumerable<Passage> GetAllPassagesByUser(string username){
-            _logger.LogInformation("Gettting all passages from the database"); 
+            //_logger.LogInformation("Gettting all passages from the database"); 
             return _context.Passages.Where(p => p.UserName == username).Include(p => p.PassageTopics)
+                                    .OrderByDescending(p => p.DateCreated).ToList();
+        }
+        public IEnumerable<Passage> GetAllPassagesWithoutTopicsByUser(string username){
+            return _context.Passages.Where(p => p.UserName == username && p.PassageTopics.Count == 0).Include(p => p.PassageTopics)
                                     .OrderByDescending(p => p.DateCreated).ToList();
         }
         public IEnumerable<Passage> GetBackupPassages(string username){
@@ -36,8 +45,13 @@ namespace IronRod.Data
             .Where(p => p.DatePassed.AddDays(p.Level) <= DateTime.Today).ToList();
         }
         public Passage GetPassageById(int id){
-            return _context.Passages.Include(p => p.Verses).Include(p => p.PassageTopics)
+            var passage = _context.Passages.Include(p => p.Verses)
+                                    .Include(p => p.PassageTopics)
+                                        .ThenInclude(pt => pt.Topic)
                                     .SingleOrDefault(p => p.ID == id);
+            if(passage != null)
+                passage.Verses = passage.Verses.OrderBy(v => v.VerseID).ToList();
+            return passage;
         }
         public void RemovePassage(Passage passage){
             _context.Passages.Remove(passage); 
@@ -68,63 +82,14 @@ namespace IronRod.Data
             return taken;
         }
         
-
-        // TOPICS 
-        public IEnumerable<Topic> GetTopicsByUser(string username){
-            return _context.Topics.Where(t => t.UserName == username)
-                                    .OrderBy(t => t.Title).ToList();
-        }
-        public Topic GetTopicById(int id){
-            return _context.Topics.SingleOrDefault(t => t.ID == id);
-        }
-        public bool AddTopic(Topic topic){
-            var taken = _context.Topics.FirstOrDefault(t => (t.UserName == topic.UserName) 
-                                                        && (t.Title == topic.Title));
-            if(taken == null){
-                _context.Topics.Add(topic);
-                return true;
-            }  
-            return false;
-        }
-        public void RemoveTopic(Topic topic){
-            _context.Topics.Remove(topic); 
-        }
-        public void EditTopic(Topic topic){
-            var t = GetTopicById(topic.ID);
-            t.Title = topic.Title;
-        }
-
-        // PASSAGE TOPICS 
-        public void AddPassageTopic(PassageTopic passagetopic){
-            _context.PassageTopics.Add(passagetopic);
-        }
-        public IEnumerable<Topic> GetTopicsByPassage(Passage passage){
-            return _context.PassageTopics.Where(pt => pt.Passage == passage)
-                                        .Select(pt => pt.Topic).ToList();
-        }
-        public IEnumerable<Passage> GetPassagesByTopic(Topic topic){
-            return _context.PassageTopics.Where(pt => pt.Topic == topic)
-                                        .Select(pt => pt.Passage).ToList();
-        }
-        public PassageTopic GetPassageTopic(Passage passage, Topic topic){
-            // TODO: change this to single or default
-            return _context.PassageTopics.FirstOrDefault(pt => pt.Passage == passage 
-                                                            && pt.Topic == topic);
-        }
-        public void RemovePassageTopic(PassageTopic passagetopic){
-            _context.PassageTopics.Remove(passagetopic);
-        }
-
         // BACKUP
         public void RemoveAllDataByUser(string username){
             _context.Passages.RemoveRange(GetAllPassagesByUser(username));
-            _context.Topics.RemoveRange(GetTopicsByUser(username));
+            _context.Topics.RemoveRange(_topics.GetTopicsByUser(username));
         }
         public void AddPassages(IEnumerable<Passage> passages){
             _context.Passages.AddRange(passages);
         }
-        public void AddTopics(IEnumerable<Topic> topics){
-            _context.Topics.AddRange(topics);
-        }
+
     }
 }

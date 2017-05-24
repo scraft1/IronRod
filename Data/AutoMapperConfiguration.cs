@@ -13,6 +13,12 @@ public static class AutoMapperConfig
 
                 config.CreateMap<Passage, PassageDetailViewModel>(); 
                 config.CreateMap<PassageVerse, PassageVerseViewModel>(); 
+                config.CreateMap<PassageTopic, TopicViewModel>()
+                    .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Topic.Title)); 
+
+                // config.CreateMap<Topic,ReviewTopicViewModel>()
+                //     .ForMember(dest => dest.Count,opts => opts.MapFrom(src => src.PassageTopics
+                //     .Where(pt => pt.Passage.DatePassed.AddDays(pt.Passage.Level) <= DateTime.Today).ToList().Count));
 
                 // get backup
                 config.CreateMap<Passage, PassageBackup>()

@@ -23,7 +23,7 @@ namespace IronRod
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
-                .UseUrls("http://192.168.0.102:5000") // allows use on network 
+                //.UseUrls("http://192.168.0.100:5000") // allows use on network 
                 .Build();
 
             host.Run();

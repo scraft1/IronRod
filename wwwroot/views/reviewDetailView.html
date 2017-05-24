@@ -10,14 +10,21 @@
     
     <p ng-repeat="verse in vm.verses">
         {{ verse.verseNumber }} &ensp; {{ verse.verseText }}</p>
-
     <br>
+    
     <div ng-show="!vm.isBusy">
+        <p>Topics:&emsp;<i><span ng-repeat="topic in vm.topics">{{topic.title}}&emsp;</span></i></p>
+        <br>
         <button ng-click="vm.hideWords()" class="btn btn-default">
             {{ vm.hidden ? 'Show' : 'Hide' }} Words</button>            
         
         <button ng-if="!vm.passedToday" ng-click="vm.passed()" class="btn btn-success pull-right">
             Passed</button> 
+        <br><br>
+        <input type="number" min="0" step="1" id="level" ng-model="vm.passage.level"
+                style="width:100px; display:inline;" class="form-control" />
+        <button ng-click="vm.setLevel()"  class="btn btn-default">Set Level</button>
+
     </div> 
 </div> 
 

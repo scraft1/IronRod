@@ -24,6 +24,7 @@
             .then(function (response) { 
                 angular.copy(response.data, vm.passages);
                 vm.handleNewDatePassed();
+                vm.sortByReference();
             }, function (error) {  
                 vm.errorMessage = "Failed to load passages: " + error;
             })
@@ -38,6 +39,22 @@
                     p.datePassed = "--";
                 }
             }
+        }
+
+        vm.sortByReference = function() {
+            vm.passages.sort(function(a,b) {
+                if(a.firstVerse < b.firstVerse) return -1;
+                if(a.firstVerse > b.firstVerse) return 1;
+                return 0;
+            });
+        }
+
+        vm.sortByDateCreated = function() {
+            vm.passages.sort(function(a,b) {
+                if(a.dateCreated > b.dateCreated) return -1;
+                if(a.dateCreated < b.dateCreated) return 1;
+                return 0;
+            });
         }
     }
 })();

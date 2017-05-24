@@ -9,10 +9,10 @@ namespace IronRod.Controllers.Web
     [Authorize]
     public class ReviewController : Controller
     {
-        private IPassagesRepository _repository; 
+        private IPassageRepository _repository; 
         private ILogger<ReviewController> _logger; 
            
-        public ReviewController(IPassagesRepository repository,
+        public ReviewController(IPassageRepository repository,
                                 ILogger<ReviewController> logger){
             _repository = repository;
             _logger = logger; 

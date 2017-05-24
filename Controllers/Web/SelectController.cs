@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using IronRod.Data;
@@ -10,11 +8,11 @@ namespace IronRod.Controllers.Web
 {
     public class SelectController : Controller
     {
-        private IPassagesRepository _repository; 
+        private IPassageRepository _repository; 
         private IScripturesRepository _scriptures;  
         private IScriptureMasteryRepository _smrepo;  
 
-        public SelectController(IPassagesRepository repository, 
+        public SelectController(IPassageRepository repository, 
             IScripturesRepository scriptures,
             IScriptureMasteryRepository smrepo){
             _repository = repository; 

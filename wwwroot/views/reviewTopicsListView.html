@@ -1,0 +1,21 @@
+<div class="col-md-offset-2 col-md-8">
+    <h3>Review Topics</h3>     
+
+    <div class="table-responsive my-tables" ng-cloak>
+        <div class="text-danger" ng-show="vm.errorMessage">{{ vm.errorMessage }} </div>
+        <wait-cursor display-when="vm.isBusy"></wait-cursor>
+
+        <table class="table table-striped" ng-show="vm.topics.length">
+            <tr>
+                <th>Topic</th>
+                <th class="text-center">Count</th>
+            </tr>
+       
+            <tr ng-repeat="topic in vm.topics">
+                <td><a ng-href="#/Topic/{{topic.id}}?title={{topic.title}}">{{ topic.title }}</a></td>
+                <td class="text-center">{{ topic.count }}</td>
+            </tr> 
+        </table>
+    </div>
+    <p ng-show="!vm.isBusy && !vm.topics.length">No passages to review</p>
+</div> 

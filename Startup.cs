@@ -44,8 +44,17 @@ namespace IronRod
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddDbContext<PassagesDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            
+            if(Configuration["ASPNETCORE_DATABASE"]=="SQLServer"){
+                services.AddDbContext<PassagesDbContext>(options =>
+                    options.UseSqlServer(Configuration["AWSSQLServer"]));
+            }
+            else {
+                services.AddDbContext<PassagesDbContext>(options =>
+                    options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            } 
+
+            // Sqlite
             services.AddDbContext<ScripturesDbContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("LdsScripturesConnection"))); 
             services.AddDbContext<ScriptureMasteryDbContext>(options =>
@@ -82,7 +91,7 @@ namespace IronRod
             services.AddMvc(config =>
             {
                 if(_env.IsProduction()){
-                    config.Filters.Add(new RequireHttpsAttribute());
+                    // config.Filters.Add(new RequireHttpsAttribute()); // removed 
                 }
             });
     
@@ -94,7 +103,8 @@ namespace IronRod
             services.AddTransient<PassagesContextSeedData>();
 
             // implement repository interfaces 
-            services.AddScoped<IPassagesRepository, PassagesRepository>();
+            services.AddScoped<IPassageRepository, PassageRepository>();
+            services.AddScoped<ITopicRepository, TopicRepository>();
             services.AddScoped<IScripturesRepository, ScripturesRepository>();
             services.AddScoped<IScriptureMasteryRepository, SMRepository>();
 

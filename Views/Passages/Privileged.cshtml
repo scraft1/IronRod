@@ -52,7 +52,7 @@
         if(!Number.isInteger(level) || level < 0){
             return false; 
         }
-        var url = "/api/passages/setlevel";
+        var url = "/api/review/setlevel";
         for(var i = 0; i < selectedPassages.length; i++){
             var data = {
                 "id":selectedPassages[i],

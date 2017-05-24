@@ -1,12 +1,21 @@
 <h3>All Passages</h3>
 
 <div ng-cloak>
-    <p>Total Verses: {{ vm.stats.totalVerses }}</p>
+    <div style="float:left">Total Verses: {{ vm.stats.totalVerses }}</div>
+
+    <div class="btn-group" data-toggle="buttons" style="float:right; margin-bottom:5px;">
+        <label ng-click="vm.sortByReference()" class="btn btn-primary active">
+            <input type="radio" autocomplete="off" checked> Sort by Reference
+        </label>
+        <label ng-click="vm.sortByDateCreated()" class="btn btn-primary">
+            <input type="radio" autocomplete="off"> Sort by Date Created
+        </label>
+    </div>
 
     <div class="text-danger" ng-show="vm.errorMessage">{{ vm.errorMessage }} </div>
     <wait-cursor display-when="vm.isBusy"></wait-cursor>
     
-    <div class="table-responsive my-tables">
+    <div class="table-responsive my-tables" style="clear:both">
         <table class="table table-striped" ng-show="vm.passages.length">
             <tr>
                 <th>Passage</th>
@@ -20,7 +29,7 @@
                 <td class="text-center">{{ passage.topics }}</td>
                 <td class="text-center">{{ passage.level }}</td>
                 <td>{{ passage.datePassed | date:'EEE, MMM d' }}</td>
-                <td>{{ passage.dateCreated | date:'EEE, MMM d'}}</td>
+                <td>{{ passage.dateCreated | date:'EEE, MMM d, yy'}}</td>
             </tr>
         </table>
     </div>
